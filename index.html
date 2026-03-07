@@ -138,6 +138,46 @@
 
         const CAKES = [
             {
+                id: 'kunafa-jar',
+                name: 'Kunafa Jar Cake',
+                desc: 'A fusion of crunchy kataifi and sweet cream layers.',
+                price: 75,
+                image: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=600',
+                tag: 'New'
+            },
+            {
+                id: 'saffron-tiramisu',
+                name: 'Saffron Tiramisu',
+                desc: 'A Swedish twist on the Italian classic with golden saffron notes.',
+                price: 85,
+                image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600',
+                tag: 'Signature'
+            },
+            {
+                id: 'rum-cake',
+                name: 'Dark Rum Cake',
+                desc: 'Dark and decadent butter cake infused with premium rum.',
+                price: 65,
+                image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600',
+                tag: 'Specialty'
+            },
+            {
+                id: 'strawberry-jar',
+                name: 'Strawberry Jar Cake',
+                desc: 'Fresh, light sponge layered with Swedish strawberries and cream.',
+                price: 75,
+                image: 'https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?auto=format&fit=crop&w=600',
+                tag: 'Light'
+            },
+            {
+                id: 'choco-lava',
+                name: 'Choco Lava Cake',
+                desc: 'The ultimate warm-centered dessert for the true chocolate lover.',
+                price: 60,
+                image: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=600',
+                tag: 'Warm'
+            },
+            {
                 id: 'banana-bread',
                 name: 'Double Choco Banana Bread',
                 desc: 'Ultra-moist caramelized banana loaf with dark chocolate swirls and walnuts.',
@@ -355,9 +395,9 @@
                         {view === 'cakes' && (
                             <div className="animate-in space-y-16 py-10">
                                 <div className="text-center space-y-6 pt-12">
-                                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">Handcrafted Loafs & Bars</h2>
+                                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">Handcrafted Jars & Cakes</h2>
                                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-[#4A3728]">Cakes & <span className="italic text-[#D4A373]">More</span></h1>
-                                    <p className="text-[#A09184] max-w-2xl mx-auto text-lg">Beyond our cookies, we craft small-batch cakes and bars that celebrate seasonal Swedish flavors. Perfect for a cozy fika at home.</p>
+                                    <p className="text-[#A09184] max-w-2xl mx-auto text-lg">Beyond our cookies, we craft small-batch cakes and specialty jars that celebrate seasonal flavors. Perfect for any sweet occasion.</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -686,7 +726,7 @@
                                     <div className="bg-[#F5EBE0] p-3 rounded-2xl"><Icon name="Cookie" size={24} className="text-[#D4A373]" /></div>
                                     <div className="space-y-1">
                                         <h3 className="font-extrabold text-[#4A3728]">Cookie Notice</h3>
-                                        <p className="text-xs text-[#A09184] line-height-relaxed">We use cookies to remember your fika box selections and improve your experience.</p>
+                                        <p className="text-xs text-[#A09184] line-height-relaxed">We use cookies to remember your fika box selections and improve your experience. Check our Privacy Policy for more details. <button onClick={() => {setView('privacy'); setShowCookieBanner(false); window.scrollTo(0,0)}} className="text-[#D4A373] underline font-bold">Privacy Policy</button>.</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3">
