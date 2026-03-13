@@ -1,4 +1,4 @@
-<!Index html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,8 +31,8 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .cookie-card:hover .cookie-image { transform: scale(1.08); }
-        .cookie-image { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .cookie-card:hover .product-media { transform: scale(1.08); }
+        .product-media { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         
         .nav-blur {
             backdrop-filter: blur(12px);
@@ -86,6 +86,22 @@
             </svg>
         );
 
+        // Helper to render image or SVG fallback
+        const ProductImage = ({ src, color, alt, className = "" }) => {
+            const [error, setError] = useState(false);
+            if (!src || error) {
+                return <CookieSVG color={color} className={className} />;
+            }
+            return (
+                <img 
+                    src={src} 
+                    alt={alt} 
+                    className={`${className} object-cover w-full h-full`}
+                    onError={() => setError(true)}
+                />
+            );
+        };
+
         const Icon = ({ name, size = 24, className = "" }) => {
             const containerRef = useRef(null);
             useEffect(() => {
@@ -110,25 +126,25 @@
 
         // --- Constants ---
         const COOKIES = [
-            { id: 'raspberry-white', name: 'Raspberry White Choco', desc: 'Tangy Swedish raspberries paired with premium creamy white chocolate chunks.', price: 38, color: '#E5989B', tag: 'New' },
-            { id: 'pistachio', name: 'Pistachio Dream', desc: 'Rich roasted pistachio dough with a silky pistachio cream center.', price: 42, color: '#B5C99A', tag: 'Best Seller' },
-            { id: 'biscoff-white', name: 'Biscoff White Choco', desc: 'Caramelized Biscoff spread core topped with white chocolate drizzles.', price: 38, color: '#D4A373', tag: 'Best Seller' },
-            { id: 'brown-butter', name: 'Brown Butter Choco', desc: 'Nutty brown butter dough loaded with 70% dark chocolate chunks and sea salt.', price: 35, color: '#8B5E3C', tag: 'The Classic' },
-            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', price: 40, color: '#A4161A', tag: 'Must Try' }
+            { id: 'raspberry-white', name: 'Raspberry White Choco', desc: 'Tangy Swedish raspberries paired with premium creamy white chocolate chunks.', price: 38, color: '#E5989B', tag: 'New', imageSrc: 'images/cookies/raspberry-white.jpg' },
+            { id: 'pistachio', name: 'Pistachio Dream', desc: 'Rich roasted pistachio dough with a silky pistachio cream center.', price: 42, color: '#B5C99A', tag: 'Best Seller', imageSrc: 'images/cookies/pistachio.jpg' },
+            { id: 'biscoff-white', name: 'Biscoff White Choco', desc: 'Caramelized Biscoff spread core topped with white chocolate drizzles.', price: 38, color: '#D4A373', tag: 'Best Seller', imageSrc: 'images/cookies/biscoff.jpg' },
+            { id: 'brown-butter', name: 'Brown Butter Choco', desc: 'Nutty brown butter dough loaded with 70% dark chocolate chunks and sea salt.', price: 35, color: '#8B5E3C', tag: 'The Classic', imageSrc: 'images/cookies/brown-butter.jpg' },
+            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', price: 40, color: '#A4161A', tag: 'Must Try', imageSrc: 'images/cookies/red-velvet.jpg' }
         ];
 
         const CAKES = [
-            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc: 'A fusion of crunchy kataifi and sweet cream layers.', price: 75, color: '#E9C46A', tag: 'New' },
-            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc: 'A Swedish twist on the Italian classic with golden saffron notes.', price: 85, color: '#F4A261', tag: 'Signature' },
-            { id: 'rum-cake', name: 'Dark Rum Cake', desc: 'Dark and decadent butter cake infused with premium rum.', price: 65, color: '#264653', tag: 'Specialty' },
-            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc: 'Fresh, light sponge layered with Swedish strawberries and cream.', price: 75, color: '#EF476F', tag: 'Light' },
-            { id: 'choco-lava', name: 'Choco Lava Cake', desc: 'The ultimate warm-centered dessert for the true chocolate lover.', price: 60, color: '#1D1D1D', tag: 'Warm' }
+            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc: 'A fusion of crunchy kataifi and sweet cream layers.', price: 75, color: '#E9C46A', tag: 'New', imageSrc: 'images/cakes/kunafa-jar.jpg' },
+            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc: 'A Swedish twist on the Italian classic with golden saffron notes.', price: 85, color: '#F4A261', tag: 'Signature', imageSrc: 'images/cakes/saffron-tiramisu.jpg' },
+            { id: 'rum-cake', name: 'Dark Rum Cake', desc: 'Dark and decadent butter cake infused with premium rum.', price: 65, color: '#264653', tag: 'Specialty', imageSrc: 'images/cakes/rum-cake.jpg' },
+            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc: 'Fresh, light sponge layered with Swedish strawberries and cream.', price: 75, color: '#EF476F', tag: 'Light', imageSrc: 'images/cakes/strawberry-jar.jpg' },
+            { id: 'choco-lava', name: 'Choco Lava Cake', desc: 'The ultimate warm-centered dessert for the true chocolate lover.', price: 60, color: '#1D1D1D', tag: 'Warm', imageSrc: 'images/cakes/choco-lava.jpg' }
         ];
 
         const BOX_OPTIONS = [
             { size: 5, price: 165, title: 'The Taster Box', label: 'Box of 5', savings: 'Save 10%' },
-            { size: 7, price: 225, title: 'The Weekender', label: 'Box of 7', savings: 'Save 15%' },
-            { size: 10, price: 295, title: 'The Fika Set', label: 'Box of 10', savings: 'Save 20%' }
+            { size: 7, price: 225, title: 'The Weekender', label: 'Box of 7', savings: 'Save 15%', imageSrc: 'images/boxes/weekender.jpg' },
+            { size: 10, price: 295, title: 'The Fika Set', label: 'Box of 10', savings: 'Save 20%', imageSrc: 'images/boxes/fika-set.jpg' }
         ];
 
         const TESTIMONIALS = [
@@ -156,7 +172,6 @@
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
 
-            // Handle View switching with scroll reset
             const navigate = (to, sectionId = null) => {
                 setView(to);
                 setIsMobileMenuOpen(false);
@@ -320,7 +335,12 @@
                                             <div key={cookie.id} className="group cookie-card bg-white rounded-[2rem] md:rounded-[2.5rem] border border-[#F2E8DF] p-5 md:p-6 hover:shadow-2xl transition-all duration-500">
                                                 <div className="relative aspect-square mb-6 md:mb-8 overflow-hidden rounded-[1.5rem] md:rounded-[2rem]">
                                                     <div className="absolute inset-0 bg-[#FAF9F6] flex items-center justify-center p-8 md:p-12">
-                                                        <CookieSVG color={cookie.color} className="cookie-image w-full h-full" />
+                                                        <ProductImage 
+                                                            src={cookie.imageSrc} 
+                                                            color={cookie.color} 
+                                                            alt={cookie.name} 
+                                                            className="product-media" 
+                                                        />
                                                     </div>
                                                     {cookie.tag && (
                                                         <div className="absolute top-4 left-4 glass-panel px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#4A3728]">{cookie.tag}</div>
@@ -358,7 +378,13 @@
                                     {CAKES.map(cake => (
                                         <div key={cake.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-[#F2E8DF] hover:shadow-xl transition-shadow group">
                                             <div className="aspect-[16/10] bg-[#FAF9F6] flex items-center justify-center p-8 relative">
-                                                <CookieSVG color={cake.color} className="w-24 h-24 md:w-32 md:h-32 group-hover:rotate-12 transition-transform duration-700" />
+                                                <div className="w-24 h-24 md:w-32 md:h-32 group-hover:rotate-12 transition-transform duration-700">
+                                                    <ProductImage 
+                                                        src={cake.imageSrc} 
+                                                        color={cake.color} 
+                                                        alt={cake.name} 
+                                                    />
+                                                </div>
                                                 <div className="absolute top-6 left-6"><span className="bg-white/90 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">{cake.tag}</span></div>
                                             </div>
                                             <div className="p-6 md:p-8 space-y-4 md:space-y-5">
@@ -396,8 +422,13 @@
                                                     className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-2 border-[#F2E8DF] hover:border-[#D4A373] transition-all group text-left space-y-6 md:space-y-8"
                                                 >
                                                     <div className="flex justify-between items-start">
-                                                        <div className="w-12 h-12 md:w-16 md:h-16 bg-[#F5EBE0] rounded-2xl flex items-center justify-center text-[#4A3728] group-hover:bg-[#4A3728] group-hover:text-white transition-all">
-                                                            <Icon name="Box" size={24} className="md:w-[32px] md:h-[32px]" />
+                                                        <div className="w-12 h-12 md:w-16 md:h-16 bg-[#F5EBE0] rounded-2xl flex items-center justify-center text-[#4A3728] group-hover:bg-[#4A3728] group-hover:text-white transition-all overflow-hidden">
+                                                            <ProductImage 
+                                                                src={box.imageSrc} 
+                                                                color="#4A3728" 
+                                                                alt={box.title} 
+                                                                className="p-3" 
+                                                            />
                                                         </div>
                                                         <span className="bg-[#D4A373] text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{box.savings}</span>
                                                     </div>
@@ -427,8 +458,13 @@
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                                 {COOKIES.map(cookie => (
                                                     <div key={cookie.id} className="bg-white p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] border border-[#F2E8DF] flex gap-4 md:gap-5 items-center">
-                                                        <div className="w-16 h-16 md:w-24 md:h-24 bg-[#FAF9F6] rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center justify-center flex-shrink-0">
-                                                            <CookieSVG color={cookie.color} className="w-full h-full" />
+                                                        <div className="w-16 h-16 md:w-24 md:h-24 bg-[#FAF9F6] rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                                            <ProductImage 
+                                                                src={cookie.imageSrc} 
+                                                                color={cookie.color} 
+                                                                alt={cookie.name} 
+                                                                className="p-3" 
+                                                            />
                                                         </div>
                                                         <div className="flex-1 space-y-2">
                                                             <h4 className="font-black text-sm md:text-base text-[#4A3728] line-clamp-1">{cookie.name}</h4>
@@ -455,10 +491,15 @@
 
                                             <div className="grid grid-cols-5 gap-2 md:gap-3">
                                                 {[...Array(selectedBoxSize)].map((_, i) => (
-                                                    <div key={i} className="aspect-square bg-white/5 border border-white/10 rounded-lg md:rounded-xl flex items-center justify-center relative group">
+                                                    <div key={i} className="aspect-square bg-white/5 border border-white/10 rounded-lg md:rounded-xl flex items-center justify-center relative group overflow-hidden">
                                                         {currentBox[i] ? (
                                                             <>
-                                                                <CookieSVG color={currentBox[i].color} className="w-full h-full p-1.5 md:p-2 scale-110 md:scale-125" />
+                                                                <ProductImage 
+                                                                    src={currentBox[i].imageSrc} 
+                                                                    color={currentBox[i].color} 
+                                                                    alt={currentBox[i].name} 
+                                                                    className="p-1 scale-110 md:scale-125" 
+                                                                />
                                                                 <button onClick={() => {
                                                                     const n = [...currentBox]; n.splice(i,1); setCurrentBox(n);
                                                                 }} className="absolute inset-0 bg-red-500/80 rounded-lg md:rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
