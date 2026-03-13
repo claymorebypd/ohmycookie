@@ -130,11 +130,11 @@
         ];
 
         const CAKES = [
-            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc: 'A fusion of crunchy kataifi and sweet cream layers.', price: 75, color: '#E9C46A', tag: 'New', imageSrc: 'images/cakes/kunafa-jar.jpg' },
-            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc: 'A Swedish twist on the Italian classic with golden saffron notes.', price: 85, color: '#F4A261', tag: 'Signature', imageSrc: 'images/cakes/saffron-tiramisu.jpg' },
-            { id: 'rum-cake', name: 'Dark Rum Cake', desc: 'Dark and decadent butter cake infused with premium rum.', price: 65, color: '#264653', tag: 'Specialty', imageSrc: 'images/cakes/rum-cake.jpg' },
-            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc: 'Fresh, light sponge layered with Swedish strawberries and cream.', price: 75, color: '#EF476F', tag: 'Light', imageSrc: 'images/cakes/strawberry-jar.jpg' },
-            { id: 'choco-lava', name: 'Choco Lava Cake', desc: 'The ultimate warm-centered dessert for the true chocolate lover.', price: 60, color: '#1D1D1D', tag: 'Warm', imageSrc: 'images/cakes/choco-lava.jpg' }
+            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc: 'A fusion of crunchy kataifi and sweet cream layers.', price: 75, color: '#E9C46A', tag: 'New', imageSrc: 'images/cookies/kunafa-jar.jpg' },
+            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc: 'A Swedish twist on the Italian classic with golden saffron notes.', price: 85, color: '#F4A261', tag: 'Signature', imageSrc: 'images/cookies/saffron-tiramisu.jpg' },
+            { id: 'rum-cake', name: 'Dark Rum Cake', desc: 'Dark and decadent butter cake infused with premium rum.', price: 65, color: '#264653', tag: 'Specialty', imageSrc: 'images/cookies/rum-cake.jpg' },
+            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc: 'Fresh, light sponge layered with Swedish strawberries and cream.', price: 75, color: '#EF476F', tag: 'Light', imageSrc: 'images/cookies/strawberry-jar.jpg' },
+            { id: 'choco-lava', name: 'Choco Lava Cake', desc: 'The ultimate warm-centered dessert for the true chocolate lover.', price: 60, color: '#1D1D1D', tag: 'Warm', imageSrc: 'images/cookies/choco-lava.jpg' }
         ];
 
         const BOX_OPTIONS = [
@@ -167,18 +167,12 @@
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
 
-            /**
-             * Fixed navigation handler for Point #1:
-             * Ensures mobile menu closes and correct section transitions 
-             * happen even across different sub-views.
-             */
             const navigate = (to, sectionId = null) => {
                 setIsMobileMenuOpen(false);
                 
                 if (sectionId) {
                     if (view !== 'home') {
                         setView('home');
-                        // Small delay to allow 'home' view to mount before scrolling
                         setTimeout(() => {
                             const el = document.getElementById(sectionId);
                             if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -493,18 +487,56 @@
                                         <CookieSVG color="#4A3728" className="w-full h-full opacity-20" />
                                     </div>
                                 </section>
-                                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-                                    {TESTIMONIALS.map((t, i) => (
-                                        <div key={i} className="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-[#F2E8DF] shadow-sm relative overflow-hidden">
-                                            <Icon name="Quote" size={40} className="text-[#F5EBE0]/50 absolute -right-2 -top-2" />
-                                            <p className="text-[#4A3728] text-base md:text-lg leading-relaxed mb-8 relative z-10">"{t.text}"</p>
-                                            <div className="relative z-10">
-                                                <div className="font-black text-[#4A3728]">{t.name}</div>
-                                                <div className="text-[9px] font-black text-[#D4A373] uppercase tracking-widest">{t.handle}</div>
+
+                                <div className="space-y-16">
+                                    <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+                                        {TESTIMONIALS.map((t, i) => (
+                                            <div key={i} className="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-[#F2E8DF] shadow-sm relative overflow-hidden">
+                                                <Icon name="Quote" size={40} className="text-[#F5EBE0]/50 absolute -right-2 -top-2" />
+                                                <p className="text-[#4A3728] text-base md:text-lg leading-relaxed mb-8 relative z-10">"{t.text}"</p>
+                                                <div className="relative z-10">
+                                                    <div className="font-black text-[#4A3728]">{t.name}</div>
+                                                    <div className="text-[9px] font-black text-[#D4A373] uppercase tracking-widest">{t.handle}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </section>
+
+                                    {/* Google Review Section */}
+                                    <section className="bg-[#4A3728] rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-20 text-white relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none">
+                                            <div className="grid grid-cols-6 gap-4 rotate-12 scale-150">
+                                                {[...Array(24)].map((_, i) => <Icon key={i} name="Heart" size={48} />)}
                                             </div>
                                         </div>
-                                    ))}
-                                </section>
+                                        <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                                            <div className="flex-1 space-y-6 md:space-y-8 text-center md:text-left">
+                                                <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#D4A373]/20 border border-[#D4A373]/30">
+                                                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#D4A373]">Share the Love</span>
+                                                </div>
+                                                <h2 className="text-3xl md:text-6xl font-black tracking-tighter leading-none">Love our cookies? <br className="md:hidden" /><span className="text-[#D4A373]">Leave a review!</span></h2>
+                                                <p className="text-[#A09184] text-sm md:text-lg max-w-xl mx-auto md:mx-0">Your feedback helps us perfect every batch. Scan the code or click the button below to leave a review on Google.</p>
+                                                <a 
+                                                    href="https://g.page/r/CWZv_BvtbH5gEBM/review" 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-3 px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover"
+                                                >
+                                                    <Icon name="ExternalLink" size={16} /> Leave a Review
+                                                </a>
+                                            </div>
+                                            <div className="shrink-0 space-y-4">
+                                                <div className="w-48 h-48 md:w-64 md:h-64 bg-white p-4 rounded-[2rem] shadow-2xl flex flex-col items-center justify-center gap-4">
+                                                    <div className="w-full h-full bg-[#FAF9F6] rounded-xl border-2 border-dashed border-[#F2E8DF] flex flex-col items-center justify-center gap-2">
+                                                        <Icon name="QrCode" size={48} className="text-[#4A3728]" />
+                                                        <span className="text-[8px] font-black uppercase tracking-widest text-[#A09184]">Scan Me</span>
+                                                    </div>
+                                                </div>
+                                                <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">Review Us on Google</p>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
                             </div>
                         )}
 
