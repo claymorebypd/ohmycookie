@@ -332,46 +332,55 @@
                 return `${prefix}-${timestamp}-${randomPart}`;
             };
 
-            const sendConfirmationEmail = (newOrderId) => {
-                // Formatting cart items for the email template
+            const sendConfirmationEmail = (finalOrderId) => {
                 const itemsList = cart.map(item => `- ${item.name} (x${item.quantity}): ${item.price * item.quantity} SEK`).join('\n');
                 
-                // Preparing parameters for the "Order Notification" (Business Side Only)
                 const templateParams = {
                     to_name: "Oh My Cookie Admin",
-                    to_email: "np636660@gmail.com", // Redirected to business inbox
+                    to_email: "np636660@gmail.com",
                     customer_name: checkoutData.name,
                     customer_email: checkoutData.email,
                     customer_phone: checkoutData.phone,
-                    order_id: newOrderId,
+                    order_id: finalOrderId, // Uses the ID passed after generation
                     total_price: totalPrice,
                     delivery_method: checkoutData.method === 'pickup' ? 'Store Pickup' : `Inner City Delivery`,
                     delivery_address: checkoutData.method === 'pickup' ? 'N/A' : checkoutData.address,
                     items_details: itemsList
                 };
 
-                // Triggering EmailJS
-                emailjs.send(
+                return emailjs.send(
                     "service_t6r1r9b",
                     "template_893j36h",
                     templateParams
-                ).then(
-                    (response) => console.log('Admin Notification Sent!', response.status, response.text),
-                    (err) => console.error('Email failed to send:', err)
                 );
             };
 
+            // REFINED PAYMENT HANDLER
+            // Now strictly: Verify -> Generate ID -> Send Email -> Show Success
             const handleSwishPayment = () => {
                 setIsSwishProcessing(true);
+                
+                // 1. Simulate Swish payment verification delay
                 setTimeout(() => {
+                    // 2. Generate the ID only after verification is "complete"
                     const newId = generateUniqueOrderId();
                     setOrderId(newId);
-                    setIsSwishProcessing(false);
-                    setCheckoutStep(4);
                     
-                    // Trigger business notification email
-                    sendConfirmationEmail(newId);
-                }, 3000);
+                    // 3. Trigger email notification with the newly generated ID
+                    sendConfirmationEmail(newId)
+                        .then(() => {
+                            console.log('Order notification sent successfully.');
+                        })
+                        .catch((err) => {
+                            console.error('Notification failed but payment was verified:', err);
+                        })
+                        .finally(() => {
+                            // 4. Move to success view and stop loader
+                            setIsSwishProcessing(false);
+                            setCheckoutStep(4);
+                        });
+                        
+                }, 3000); // 3-second simulation for verification
             };
 
             const swishLink = `swish://payment?address=0764349138&amount=${totalPrice}&message=Order%20OhMyCookie&edit=false`;
@@ -477,7 +486,7 @@
                                         <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto md:mx-0 leading-relaxed">Handcrafted cookies and specialty jar cakes. Fresh fika delivered across Stockholm.</p>
                                         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6">
                                             <button onClick={() => navigate('shop')} className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">Build Your Box</button>
-                                            <button onClick={() => navigate('home', 'cookies-section')} className="w-full sm:w-auto px-10 py-5 glass-panel text-white border border-white/20 rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">Our Menu</button>
+                                            <button onClick={() => navigate('home', 'cookies-section')} className="bg-white text-[#4A3728] px-8 py-5 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-[#D4A373] hover:text-white transition-all">Our Menu</button>
                                         </div>
                                     </div>
                                 </header>
@@ -962,7 +971,7 @@
                                 <div className="space-y-10 text-[#A09184] leading-relaxed text-sm md:text-base">
                                     <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
                                         <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">1. Introduction</h3>
-                                        <p>At Oh My Cookie (part of BLUDEN AB), we respect your privacy and are committed to protecting the personal data you share with us. This policy outlines how we handle your information in accordance with Swedish law and GDPR standards.</p>
+                                        <p>At Oh My Cookie, we respect your privacy and are committed to protecting the personal data you share with us. This policy outlines how we handle your information in accordance with Swedish law and GDPR standards.</p>
                                     </section>
 
                                     <section className="space-y-6">
@@ -1037,6 +1046,7 @@
                                     <li><button onClick={() => navigate('shop')} className="hover:text-white transition-colors">Order Now</button></li>
                                     <li><button onClick={() => navigate('cakes')} className="hover:text-white transition-colors">Jar Cakes</button></li>
                                     <li><button onClick={() => navigate('about')} className="hover:text-white transition-colors">Our Kitchen</button></li>
+                                    <li><a href="https://g.page/r/CWZv_BvtbH5gEBM/review" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Write Review</a></li>
                                     <li><button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">Privacy Policy</button></li>
                                 </ul>
                             </div>
