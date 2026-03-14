@@ -14,6 +14,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Initializing EmailJS with the provided Public Key
+            emailjs.init("3KI9EiGAUzljTFtkV");
+        })();
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         
@@ -81,7 +89,6 @@
             background: linear-gradient(135deg, #2D58A7 0%, #1D3D73 100%);
         }
 
-        /* Swish Simulator Animation */
         .swish-loader {
             width: 40px;
             height: 40px;
@@ -101,6 +108,23 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
+
+        // Custom SVG Icons
+        const ShoppingBagSVG = ({ size = 20, className = "" }) => (
+            <svg 
+                width={size} 
+                height={size} 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={className}
+            >
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+        );
 
         const CookieSVG = ({ color = "#D4A373", className = "" }) => (
             <svg viewBox="0 0 200 200" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -207,9 +231,9 @@
             const [showCookieBanner, setShowCookieBanner] = useState(false);
             const [scrolled, setScrolled] = useState(false);
             
-            // Checkout State
             const [checkoutStep, setCheckoutStep] = useState(1);
             const [isSwishProcessing, setIsSwishProcessing] = useState(false);
+            const [orderId, setOrderId] = useState(null);
             const [checkoutData, setCheckoutData] = useState({
                 name: '', email: '', phone: '',
                 method: 'pickup', address: '',
@@ -240,7 +264,10 @@
                     }
                 } else {
                     setView(to);
-                    if (to === 'checkout') setCheckoutStep(1);
+                    if (to === 'checkout') {
+                        setCheckoutStep(1);
+                        setOrderId(null);
+                    }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             };
@@ -271,19 +298,82 @@
                 setIsCartOpen(true);
             };
 
+            // Email Validation Logic
+            const isValidEmail = (email) => {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            };
+
+            // Enhanced Phone Validation & Formatting
+            const formatSwedishPhone = (input) => {
+                const digits = input.replace(/\D/g, '');
+                let formatted = digits.substring(0, 9);
+                if (formatted.length > 5) {
+                    formatted = `${formatted.slice(0, 2)} ${formatted.slice(2, 5)} ${formatted.slice(5, 7)} ${formatted.slice(7)}`;
+                } else if (formatted.length > 2) {
+                    formatted = `${formatted.slice(0, 2)} ${formatted.slice(2)}`;
+                }
+                return formatted.trim();
+            };
+
+            const isValidSwedishPhone = (number) => {
+                const digitsOnly = number.replace(/\s+/g, '');
+                return digitsOnly.length === 9 && digitsOnly.startsWith('7');
+            };
+
             const handleCheckoutNext = () => setCheckoutStep(prev => prev + 1);
             const handleCheckoutBack = () => setCheckoutStep(prev => prev - 1);
 
+            // Unique Order ID Logic
+            const generateUniqueOrderId = () => {
+                const prefix = "OMC";
+                const timestamp = Date.now().toString(36).toUpperCase(); 
+                const randomPart = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                return `${prefix}-${timestamp}-${randomPart}`;
+            };
+
+            const sendConfirmationEmail = (newOrderId) => {
+                // Formatting cart items for the email template
+                const itemsList = cart.map(item => `- ${item.name} (x${item.quantity}): ${item.price * item.quantity} SEK`).join('\n');
+                
+                // Preparing parameters for the "Order Notification" (Business Side Only)
+                const templateParams = {
+                    to_name: "Oh My Cookie Admin",
+                    to_email: "np636660@gmail.com", // Redirected to business inbox
+                    customer_name: checkoutData.name,
+                    customer_email: checkoutData.email,
+                    customer_phone: checkoutData.phone,
+                    order_id: newOrderId,
+                    total_price: totalPrice,
+                    delivery_method: checkoutData.method === 'pickup' ? 'Store Pickup' : `Inner City Delivery`,
+                    delivery_address: checkoutData.method === 'pickup' ? 'N/A' : checkoutData.address,
+                    items_details: itemsList
+                };
+
+                // Triggering EmailJS
+                emailjs.send(
+                    "service_t6r1r9b",
+                    "template_893j36h",
+                    templateParams
+                ).then(
+                    (response) => console.log('Admin Notification Sent!', response.status, response.text),
+                    (err) => console.error('Email failed to send:', err)
+                );
+            };
+
             const handleSwishPayment = () => {
                 setIsSwishProcessing(true);
-                // Simulate "Bank ID / Swish" Verification
                 setTimeout(() => {
+                    const newId = generateUniqueOrderId();
+                    setOrderId(newId);
                     setIsSwishProcessing(false);
                     setCheckoutStep(4);
+                    
+                    // Trigger business notification email
+                    sendConfirmationEmail(newId);
                 }, 3000);
             };
 
-            // Dynamic Deep Link Generation
             const swishLink = `swish://payment?address=0764349138&amount=${totalPrice}&message=Order%20OhMyCookie&edit=false`;
 
             const navItems = [
@@ -322,11 +412,11 @@
                             <div className="flex items-center gap-2 md:gap-4">
                                 <button 
                                     onClick={() => setIsCartOpen(true)}
-                                    className="relative w-10 h-10 md:w-12 md:h-12 glass-panel rounded-xl md:rounded-2xl flex items-center justify-center hover:scale-105 transition-transform"
+                                    className="relative h-10 px-3 md:h-12 md:px-4 glass-panel rounded-xl md:rounded-2xl flex items-center justify-center gap-2.5 border border-[#D4A373]/20 hover:scale-105 transition-transform"
                                 >
-                                    <Icon name="ShoppingBag" size={18} className="md:w-[20px] md:h-[20px]" />
+                                    <ShoppingBagSVG size={18} className="text-[#4A3728]" />
                                     {totalItemsCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 bg-[#D4A373] text-white text-[9px] font-black w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center ring-2 ring-white">
+                                        <span className="bg-[#D4A373] text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full flex items-center justify-center min-w-[20px]">
                                             {totalItemsCount}
                                         </span>
                                     )}
@@ -533,9 +623,7 @@
                         {view === 'checkout' && (
                             <div className="max-w-6xl mx-auto animate-in pt-6 md:pt-10">
                                 <div className="grid lg:grid-cols-3 gap-8 md:gap-12">
-                                    {/* Checkout Wizard Steps */}
                                     <div className="lg:col-span-2 space-y-8 md:space-y-12">
-                                        {/* Step Progress Bar */}
                                         <div className="flex justify-between items-center px-2">
                                             {[1, 2, 3, 4].map(step => (
                                                 <div key={step} className="flex items-center flex-1 last:flex-none">
@@ -570,26 +658,39 @@
                                                             <input 
                                                                 type="email" 
                                                                 placeholder="hello@ohmycookie.se"
-                                                                className="w-full px-6 py-4 bg-[#FAF9F6] border border-[#F2E8DF] rounded-2xl font-bold"
+                                                                className={`w-full px-6 py-4 bg-[#FAF9F6] border border-[#F2E8DF] rounded-2xl font-bold transition-colors ${checkoutData.email && !isValidEmail(checkoutData.email) ? 'border-red-300 bg-red-50' : ''}`}
                                                                 value={checkoutData.email}
-                                                                onChange={e => setCheckoutData({...checkoutData, email: e.target.value})}
+                                                                onChange={e => setCheckoutData({...checkoutData, email: e.target.value.toLowerCase().trim()})}
                                                             />
+                                                            {checkoutData.email && !isValidEmail(checkoutData.email) && (
+                                                                <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest ml-1 animate-in">
+                                                                    Please enter a valid email address
+                                                                </p>
+                                                            )}
                                                         </div>
                                                         <div className="space-y-2">
                                                             <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">Phone Number</label>
-                                                            <input 
-                                                                type="tel" 
-                                                                placeholder="+46 70 000 00 00"
-                                                                className="w-full px-6 py-4 bg-[#FAF9F6] border border-[#F2E8DF] rounded-2xl font-bold"
-                                                                value={checkoutData.phone}
-                                                                onChange={e => setCheckoutData({...checkoutData, phone: e.target.value})}
-                                                            />
+                                                            <div className="relative group">
+                                                                <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-[#4A3728]/40 text-sm md:text-base">+46</span>
+                                                                <input 
+                                                                    type="tel" 
+                                                                    placeholder="70 000 00 00"
+                                                                    className={`w-full pl-16 pr-6 py-4 bg-[#FAF9F6] border border-[#F2E8DF] rounded-2xl font-bold transition-colors ${checkoutData.phone && !isValidSwedishPhone(checkoutData.phone) ? 'border-red-300 bg-red-50' : ''}`}
+                                                                    value={checkoutData.phone}
+                                                                    onChange={e => setCheckoutData({...checkoutData, phone: formatSwedishPhone(e.target.value)})}
+                                                                />
+                                                            </div>
+                                                            <p className="text-[10px] font-bold text-[#A09184] uppercase tracking-widest ml-1">
+                                                                {checkoutData.phone && !isValidSwedishPhone(checkoutData.phone) 
+                                                                    ? <span className="text-red-500 animate-in">Please enter a valid mobile number (7X ...)</span>
+                                                                    : 'Standard Swedish mobile format'}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <button 
                                                     onClick={handleCheckoutNext}
-                                                    disabled={!checkoutData.name || !checkoutData.email || !checkoutData.phone}
+                                                    disabled={!checkoutData.name || !isValidEmail(checkoutData.email) || !isValidSwedishPhone(checkoutData.phone)}
                                                     className="w-full py-5 bg-[#4A3728] text-white rounded-2xl font-black uppercase tracking-widest disabled:opacity-30 hover:bg-[#D4A373] transition-colors"
                                                 >
                                                     Continue to Delivery
@@ -658,9 +759,7 @@
 
                                         {checkoutStep === 3 && (
                                             <div className="bg-white p-4 md:p-0 md:bg-transparent rounded-[2.5rem] space-y-8 animate-in">
-                                                {/* Simulated Swish App Screen */}
                                                 <div className="max-w-md mx-auto swish-bg rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/10">
-                                                    {/* App Header */}
                                                     <div className="p-8 pb-4 flex flex-col items-center gap-4">
                                                         <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
                                                             <Icon name="Smartphone" size={32} className="text-[#2D58A7]" />
@@ -671,7 +770,6 @@
                                                         </div>
                                                     </div>
 
-                                                    {/* Payment Details Card */}
                                                     <div className="px-6 pb-8">
                                                         <div className="bg-white rounded-[2rem] p-8 shadow-xl space-y-6 text-center">
                                                             {isSwishProcessing ? (
@@ -701,7 +799,6 @@
                                                                             <a 
                                                                                 href={swishLink}
                                                                                 onClick={(e) => {
-                                                                                    // Since we can't actually open the app in this environment, we simulate
                                                                                     e.preventDefault();
                                                                                     handleSwishPayment();
                                                                                 }}
@@ -722,7 +819,6 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    {/* Footer Branding */}
                                                     <div className="pb-8 text-center">
                                                         <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.3em]">Secure Fika Protocol</p>
                                                     </div>
@@ -735,16 +831,16 @@
                                         {checkoutStep === 4 && (
                                             <div className="bg-white p-8 md:p-16 rounded-[2.5rem] border border-[#F2E8DF] text-center space-y-8 animate-in">
                                                 <div className="w-24 h-24 bg-[#B5C99A]/20 text-[#4A3728] rounded-full flex items-center justify-center mx-auto mb-4">
-                                                    <Icon name="Check" size={48} />
+                                                    <span className="text-[#4A3728]"><Icon name="Check" size={48} /></span>
                                                 </div>
                                                 <div className="space-y-4">
                                                     <h2 className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">Order Confirmed!</h2>
-                                                    <p className="text-[#A09184] max-w-sm mx-auto">Tack, {checkoutData.name.split(' ')[0]}! We've received your order. We'll send the details to <span className="text-[#4A3728] font-bold">{checkoutData.email}</span>.</p>
+                                                    <p className="text-[#A09184] max-w-sm mx-auto">Tack, {checkoutData.name.split(' ')[0]}! We've received your order. We've sent a confirmation email to <span className="text-[#4A3728] font-bold">{checkoutData.email}</span>.</p>
                                                 </div>
                                                 <div className="bg-[#FAF9F6] p-8 rounded-3xl border border-[#F2E8DF] text-left space-y-4 max-w-sm mx-auto">
                                                     <div className="flex justify-between items-center pb-4 border-b border-[#F2E8DF]">
                                                         <span className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">Order ID</span>
-                                                        <span className="font-black">#OMC-{Math.floor(Math.random() * 9000) + 1000}</span>
+                                                        <span className="font-black text-xs">{orderId}</span>
                                                     </div>
                                                     <div className="space-y-1">
                                                         <p className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">Collection/Delivery</p>
@@ -756,12 +852,11 @@
                                         )}
                                     </div>
 
-                                    {/* Sticky Summary Panel */}
                                     {checkoutStep < 4 && (
                                         <div className="lg:sticky lg:top-28 h-fit space-y-6">
                                             <div className="bg-[#4A3728] text-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl space-y-8 animate-in">
                                                 <h3 className="text-2xl font-black tracking-tight flex items-center gap-3">
-                                                    <Icon name="ShoppingBag" size={24} />
+                                                    <ShoppingBagSVG size={24} className="text-[#D4A373]" />
                                                     Summary
                                                 </h3>
                                                 <div className="space-y-4 max-h-[300px] overflow-y-auto no-scrollbar pr-2">
@@ -789,10 +884,6 @@
                                                         <span className="text-4xl font-black tracking-tighter text-[#D4A373]">{totalPrice} SEK</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="bg-white p-6 rounded-3xl border border-[#F2E8DF] flex items-center gap-4">
-                                                <div className="w-10 h-10 bg-[#FAF9F6] text-[#2D58A7] rounded-xl flex items-center justify-center border border-gray-100"><Icon name="ShieldCheck" size={20} /></div>
-                                                <p className="text-[10px] font-bold text-[#A09184] uppercase tracking-widest leading-relaxed">Secure Swish Transaction <br/> & Data Protection</p>
                                             </div>
                                         </div>
                                     )}
@@ -866,53 +957,63 @@
                             <div className="max-w-4xl mx-auto py-12 md:py-20 space-y-12 md:space-y-16 animate-in">
                                 <div className="space-y-4 text-center md:text-left border-b border-[#F2E8DF] pb-10">
                                     <h1 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter leading-none">Privacy Policy</h1>
-                                    <p className="text-[#A09184] font-medium tracking-widest uppercase text-[10px]">Effective: March, 2026</p>
+                                    <p className="text-[#A09184] font-medium tracking-widest uppercase text-[10px]">Effective: March 14, 2026</p>
                                 </div>
-                                <div className="space-y-12 text-[#A09184] leading-relaxed text-sm md:text-base">
+                                <div className="space-y-10 text-[#A09184] leading-relaxed text-sm md:text-base">
                                     <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
                                         <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">1. Introduction</h3>
-                                        <p>Welcome to Ohmycookie (referred to as "we", "us", or "our"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This policy outlines how we collect, use, and protect your data when you visit <span className="text-[#D4A373] font-bold">ohmycookie.se</span>.</p>
+                                        <p>At Oh My Cookie (part of BLUDEN AB), we respect your privacy and are committed to protecting the personal data you share with us. This policy outlines how we handle your information in accordance with Swedish law and GDPR standards.</p>
                                     </section>
-                                    <section className="space-y-5">
+
+                                    <section className="space-y-6">
                                         <h3 className="text-xl md:text-2xl font-black text-[#4A3728] border-l-4 border-[#D4A373] pl-6">2. Information We Collect</h3>
-                                        <p>When you place a pickup order or use our "Build a Box" feature, we may collect:</p>
-                                        <ul className="grid md:grid-cols-3 gap-4">
-                                            <li className="bg-[#FAF9F6] p-4 rounded-2xl"><span className="block text-[#4A3728] font-black text-xs uppercase mb-1">Contact Details</span> Your name and phone number to verify your order during in-store pickup.</li>
-                                            <li className="bg-[#FAF9F6] p-4 rounded-2xl"><span className="block text-[#4A3728] font-black text-xs uppercase mb-1">Order History</span> Details of the cookie selections and boxes you have curated.</li>
-                                            <li className="bg-[#FAF9F6] p-4 rounded-2xl"><span className="block text-[#4A3728] font-black text-xs uppercase mb-1">Usage Data</span> Information on how you interact with our website to improve your user experience.</li>
-                                        </ul>
-                                    </section>
-                                    <section className="space-y-4">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">3. How We Use Your Information</h3>
-                                        <p>Your data is used strictly for operational purposes:</p>
-                                        <div className="space-y-3">
-                                            <div className="flex gap-4 items-start"><Icon name="CheckCircle2" size={20} className="text-[#D4A373] shrink-0" /><p>To process and fulfill your cookie orders for pickup in Stockholm.</p></div>
-                                            <div className="flex gap-4 items-start"><Icon name="CheckCircle2" size={20} className="text-[#D4A373] shrink-0" /><p>To provide customer support regarding your order.</p></div>
-                                            <div className="flex gap-4 items-start"><Icon name="CheckCircle2" size={20} className="text-[#D4A373] shrink-0" /><p>To improve our website functionality and cookie menu based on popular selections.</p></div>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-[#FAF9F6] p-6 rounded-2xl">
+                                                <span className="block text-[#4A3728] font-black text-xs uppercase mb-2">Order Fulfillment</span>
+                                                <p className="text-xs">We collect your name, email, phone number, and delivery address to process your fika orders and verify your identity during store pickup.</p>
+                                            </div>
+                                            <div className="bg-[#FAF9F6] p-6 rounded-2xl">
+                                                <span className="block text-[#4A3728] font-black text-xs uppercase mb-2">Communications</span>
+                                                <p className="text-xs">If you contact us via email or social media, we may keep a record of that correspondence to better serve your requests.</p>
+                                            </div>
                                         </div>
                                     </section>
-                                    <section className="space-y-4">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">4. Data Storage & GDPR</h3>
-                                        <p>As a Swedish company (Bluden AB), we comply with the General Data Protection Regulation (GDPR). Your data is stored securely and is only accessible to authorized staff members necessary for order fulfillment. We do not sell your personal data to third parties.</p>
+
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF]">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">3. Data Security & Storage</h3>
+                                        <p>We implement industry-standard security measures to safeguard your information. We do not store credit card details; all financial transactions are handled securely via third-party providers like Swish.</p>
+                                        <p className="text-xs italic">Data is stored only as long as necessary to fulfill the purposes for which it was collected, or as required by Swedish accounting laws.</p>
                                     </section>
-                                    <section className="space-y-4">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">5. Cookies</h3>
-                                        <p>Our website uses "cookies" to enhance your experience. These are small files stored on your device that help us remember your shopping basket and preferences. You can choose to disable cookies in your browser settings, though this may limit your ability to use the "Build a Box" feature.</p>
+
+                                    <section className="space-y-6">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728] border-l-4 border-[#D4A373] pl-6">4. Your Rights (GDPR)</h3>
+                                        <p>Under the General Data Protection Regulation, you have the following rights regarding your personal data:</p>
+                                        <ul className="grid gap-3">
+                                            <li className="flex gap-4 items-start">
+                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
+                                                <p><span className="font-bold text-[#4A3728]">Access:</span> You can request a copy of the data we hold about you.</p>
+                                            </li>
+                                            <li className="flex gap-4 items-start">
+                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
+                                                <p><span className="font-bold text-[#4A3728]">Correction:</span> You can ask us to correct inaccurate or incomplete information.</p>
+                                            </li>
+                                            <li className="flex gap-4 items-start">
+                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
+                                                <p><span className="font-bold text-[#4A3728]">Deletion:</span> You can request that we delete your personal data when it is no longer needed.</p>
+                                            </li>
+                                        </ul>
                                     </section>
-                                    <div className="grid md:grid-cols-2 gap-8">
-                                        <section className="space-y-4 p-8 bg-[#4A3728] text-white rounded-[2.5rem]">
-                                            <h3 className="text-xl font-black">6. Company Information</h3>
-                                            <div className="space-y-1 text-[#A09184] text-sm">
-                                                <p className="text-white font-bold">Bluden AB</p>
-                                                <p>Stockholm, Sweden</p>
-                                                <p className="mt-4 pt-4 border-t border-white/10">Contact: <span className="text-[#D4A373]">bludenab@gmail.com</span></p>
-                                            </div>
-                                        </section>
-                                        <section className="space-y-4 p-8 bg-white border border-[#F2E8DF] rounded-[2.5rem]">
-                                            <h3 className="text-xl font-black text-[#4A3728]">7. Your Rights</h3>
-                                            <p className="text-sm">You have the right to request access to the personal data we hold about you, to request corrections, or to ask for your data to be deleted from our pickup logs. Please contact us via email for any such requests.</p>
-                                        </section>
-                                    </div>
+
+                                    <section className="bg-[#4A3728] p-8 md:p-10 rounded-[2.5rem] text-white space-y-4">
+                                        <h3 className="text-xl font-black text-[#D4A373]">5. Contact Us</h3>
+                                        <p className="text-sm opacity-80 leading-relaxed">If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact our Data Protection Officer at:</p>
+                                        <div className="pt-2">
+                                            <p className="font-black">BLUDEN AB</p>
+                                            <p className="text-xs opacity-60">Stockholm, Sweden</p>
+                                            <p className="text-[#D4A373] font-bold mt-2">hello@ohmycookie.se</p>
+                                        </div>
+                                    </section>
+
                                     <div className="text-center pt-10">
                                         <button onClick={() => setView('home')} className="px-10 py-5 bg-[#FAF9F6] border border-[#F2E8DF] text-[#4A3728] rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">Back to Home</button>
                                     </div>
@@ -960,7 +1061,12 @@
                                     <button onClick={() => setIsCartOpen(false)} className="p-3 md:p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors"><Icon name="X" size={20} /></button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 md:space-y-6">
-                                    {cart.length === 0 ? (<div className="text-center py-20 opacity-20"><Icon name="ShoppingBag" size={48} className="mx-auto mb-4" /><p className="font-black text-sm uppercase tracking-widest">Bag is empty</p></div>) : (
+                                    {cart.length === 0 ? (
+                                        <div className="text-center py-20 opacity-20">
+                                            <ShoppingBagSVG size={48} className="mx-auto mb-4" />
+                                            <p className="font-black text-sm uppercase tracking-widest">Bag is empty</p>
+                                        </div>
+                                    ) : (
                                         cart.map(item => (
                                             <div key={item.id} className="flex justify-between items-center bg-[#FDFBF7] p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-[#F2E8DF]">
                                                 <div className="flex-1 mr-4"><h4 className="font-black text-base md:text-lg text-[#4A3728] leading-tight">{item.name}</h4><p className="text-[10px] font-black text-[#D4A373] uppercase tracking-widest mt-1">{item.price} SEK</p></div>
