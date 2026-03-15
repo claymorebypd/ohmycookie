@@ -109,6 +109,154 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
 
+        // --- TRANSLATIONS ---
+        const TRANSLATIONS = {
+            en: {
+                navHome: "Home",
+                navCookies: "Cookies",
+                navCakes: "Cakes & Jars",
+                navShop: "Build Box",
+                navAbout: "About",
+                heroTag: "Stockholm Bakery",
+                heroTitle: "THE ART OF THE Perfect CRUNCH.",
+                heroSub: "Handcrafted cookies and specialty jar cakes. Fresh fika delivered across Stockholm.",
+                heroBtnShop: "Build Your Box",
+                heroBtnMenu: "Our Menu",
+                secTag: "Fresh from the oven",
+                secTitle: "Signature Cookies",
+                secSub: "Baking with 100% organic butter and premium cocoa.",
+                addBag: "Add to bag",
+                cakeTag: "Specialty Collection",
+                cakeTitle: "Cakes & Jars",
+                cakeSub: "Layered with fresh Swedish cream and high-quality infusions.",
+                boxTitle: "Curate Your Fika Box",
+                boxSub: "Pick a size and fill it with your favorite flavors.",
+                back: "Back",
+                added: "added",
+                boxAdded: "Add Box to Bag",
+                addMore: "Add",
+                checkoutTitle: "Checkout",
+                yourDetails: "Your Details",
+                detailSub: "Please enter your contact information.",
+                fullName: "Full Name",
+                email: "Email Address",
+                phone: "Phone Number",
+                contDelivery: "Continue to Delivery",
+                delMethod: "Delivery Method",
+                delSub: "How would you like to receive your fika?",
+                pickup: "Store Pickup",
+                pickupSub: "Free • Stockholm City",
+                delivery: "Inner City Delivery",
+                deliverySub: "49 SEK • Stockholm Area",
+                address: "Delivery Address",
+                goPayment: "Go to Payment",
+                verifying: "Verifying Payment...",
+                totalAmount: "Total Amount",
+                receiver: "Receiver",
+                openSwish: "Open Swish App",
+                alreadyPaid: "Already Paid? Verify Now",
+                orderConfirmed: "Order Confirmed!",
+                orderSub: "Tack, {name}! We've received your order. We've sent a confirmation email to {email}.",
+                orderId: "Order ID",
+                collDel: "Collection/Delivery",
+                backHome: "Back to Homepage",
+                summary: "Summary",
+                subtotal: "Subtotal",
+                deliveryFee: "Delivery",
+                total: "Total",
+                aboutTitle: "Small Batch, Big Heart.",
+                aboutQuote: "Cookies meant for the moment you finally sit down and take a breath.",
+                aboutP1: "Founded by PD, Oh! My Cookie started in a small Stockholm kitchen with one goal: to redefine the fika staple.",
+                aboutP2: "We use 100% organic Swedish butter and ethically sourced cocoa. No shortcuts, just craft.",
+                shareLove: "Share the Love",
+                reviewTitle: "Love our cookies?",
+                reviewTitleColor: "Leave a review!",
+                reviewSub: "Your feedback helps us perfect every batch. Scan the code or click the button below to leave a review on Google.",
+                writeReview: "Write a Review",
+                scanReview: "Scan to Review",
+                privacyTitle: "Privacy Policy",
+                bag: "Your Bag",
+                bagEmpty: "Bag is empty",
+                proceedCheckout: "Proceed to Checkout",
+                cookieTitle: "Cookie Policy",
+                cookieSub: "We use essential cookies to remember your box fika selections. No tracking involved.",
+                accept: "Accept",
+                close: "Close"
+            },
+            sv: {
+                navHome: "Hem",
+                navCookies: "Kakor",
+                navCakes: "Tårtor & Burkar",
+                navShop: "Bygg Box",
+                navAbout: "Om oss",
+                heroTag: "Stockholms Bageri",
+                heroTitle: "KONSTEN ATT SKAPA Det Perfekta CRUNCHET.",
+                heroSub: "Handgjorda kakor och specialiteter i burk. Färsk fika levererad över hela Stockholm.",
+                heroBtnShop: "Bygg din box",
+                heroBtnMenu: "Vår meny",
+                secTag: "Nybakat ur ugnen",
+                secTitle: "Våra Signaturkakor",
+                secSub: "Bakade med 100% ekologiskt smör och premiumkakao.",
+                addBag: "Lägg i påsen",
+                cakeTag: "Specialkollektion",
+                cakeTitle: "Tårtor & Burkar",
+                cakeSub: "Lager med färsk svensk grädde och ingredienser av högsta kvalitet.",
+                boxTitle: "Skapa din egen Fika-box",
+                boxSub: "Välj storlek och fyll den med dina favoritfyllningar.",
+                back: "Tillbaka",
+                added: "valda",
+                boxAdded: "Lägg boxen i påsen",
+                addMore: "Lägg till",
+                checkoutTitle: "Kassan",
+                yourDetails: "Dina uppgifter",
+                detailSub: "Vänligen ange din kontaktinformation.",
+                fullName: "Fullständigt namn",
+                email: "E-postadress",
+                phone: "Telefonnummer",
+                contDelivery: "Fortsätt till leverans",
+                delMethod: "Leveranssätt",
+                delSub: "Hur vill du få din fika?",
+                pickup: "Hämta i butik",
+                pickupSub: "Gratis • Stockholm City",
+                delivery: "Hemleverans City",
+                deliverySub: "49 SEK • Stockholmsområdet",
+                address: "Leveransadress",
+                goPayment: "Gå till betalning",
+                verifying: "Verifierar betalning...",
+                totalAmount: "Totalbelopp",
+                receiver: "Mottagare",
+                openSwish: "Öppna Swish-appen",
+                alreadyPaid: "Redan betalat? Verifiera nu",
+                orderConfirmed: "Order Bekräftad!",
+                orderSub: "Tack, {name}! Vi har tagit emot din beställning. Vi har skickat en bekräftelse till {email}.",
+                orderId: "Order-ID",
+                collDel: "Upphämtning/Leverans",
+                backHome: "Tillbaka till startsidan",
+                summary: "Sammanfattning",
+                subtotal: "Delsumma",
+                deliveryFee: "Frakt",
+                total: "Totalt",
+                aboutTitle: "Små partier, stort hjärta.",
+                aboutQuote: "Kakor skapade för stunden då du äntligen sätter dig ner och tar ett djupt andetag.",
+                aboutP1: "Oh! My Cookie grundades av PD i ett litet kök i Stockholm med ett mål: att definiera om fika-klassikern.",
+                aboutP2: "Vi använder 100% ekologiskt svenskt smör och etiskt framställd kakao. Inga genvägar, bara hantverk.",
+                shareLove: "Dela kärleken",
+                reviewTitle: "Gillar du våra kakor?",
+                reviewTitleColor: "Lämna ett omdöme!",
+                reviewSub: "Din feedback hjälper oss att göra varje sats perfekt. Skanna koden eller klicka på knappen nedan för att lämna ett omdöme på Google.",
+                writeReview: "Skriv ett omdöme",
+                scanReview: "Skanna för omdöme",
+                privacyTitle: "Integritetspolicy",
+                bag: "Din påse",
+                bagEmpty: "Påsen är tom",
+                proceedCheckout: "Gå till kassan",
+                cookieTitle: "Cookie-policy",
+                cookieSub: "Vi använder nödvändiga cookies för att komma ihåg dina val. Ingen spårning sker.",
+                accept: "Acceptera",
+                close: "Stäng"
+            }
+        };
+
         // Custom SVG Icons
         const ShoppingBagSVG = ({ size = 20, className = "" }) => (
             <svg 
@@ -176,31 +324,31 @@
         };
 
         const COOKIES = [
-            { id: 'raspberry-white', name: 'Raspberry White Choco', desc: 'Tangy Swedish raspberries paired with premium creamy white chocolate chunks.', price: 38, color: '#E5989B', tag: 'New', imageSrc: 'images/cookies/raspberry-white.jpg' },
-            { id: 'pistachio', name: 'Pistachio Cookie', desc: 'Rich roasted pistachio dough with a silky pistachio cream center.', price: 42, color: '#B5C99A', tag: 'Best Seller', imageSrc: 'images/cookies/pistachio.jpg' },
-            { id: 'biscoff-white', name: 'Biscoff White Choco', desc: 'Caramelized Biscoff spread core topped with white chocolate drizzles.', price: 38, color: '#D4A373', tag: 'Best Seller', imageSrc: 'images/cookies/biscoff.jpg' },
-            { id: 'brown-butter', name: 'Brown Butter Choco', desc: 'Nutty brown butter dough loaded with 70% dark chocolate chunks and sea salt.', price: 35, color: '#8B5E3C', tag: 'The Classic', imageSrc: 'images/cookies/brown-butter.jpg' },
-            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', price: 40, color: '#A4161A', tag: 'Must Try', imageSrc: 'images/cookies/red-velvet.jpg' }
+            { id: 'raspberry-white', name: 'Raspberry White Choco', desc_en: 'Tangy Swedish raspberries paired with premium creamy white chocolate chunks.', desc_sv: 'Syrliga svenska hallon parade med krämiga bitar av vit choklad.', price: 38, color: '#E5989B', tag_en: 'New', tag_sv: 'Nyhet', imageSrc: 'images/cookies/raspberry-white.jpg' },
+            { id: 'pistachio', name: 'Pistachio Cookie', desc_en: 'Rich roasted pistachio dough with a silky pistachio cream center.', desc_sv: 'Lyxig deg på rostade pistagenötter med en silkeslen pistagekräm i mitten.', price: 42, color: '#B5C99A', tag_en: 'Best Seller', tag_sv: 'Bästsäljare', imageSrc: 'images/cookies/pistachio.jpg' },
+            { id: 'biscoff-white', name: 'Biscoff White Choco', desc_en: 'Caramelized Biscoff spread core topped with white chocolate drizzles.', desc_sv: 'Kärna av karamelliserad Biscoff toppad med vit choklad.', price: 38, color: '#D4A373', tag_en: 'Best Seller', tag_sv: 'Bästsäljare', imageSrc: 'images/cookies/biscoff.jpg' },
+            { id: 'brown-butter', name: 'Brown Butter Choco', desc_en: 'Nutty brown butter dough loaded with 70% dark chocolate chunks and sea salt.', desc_sv: 'Deg på brynt smör fylld med 70% mörk choklad och flingsalt.', price: 35, color: '#8B5E3C', tag_en: 'The Classic', tag_sv: 'Klassikern', imageSrc: 'images/cookies/brown-butter.jpg' },
+            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc_en: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', desc_sv: 'Kakao-deg med en fyllning av krämig och syrlig cream cheese-frosting.', price: 40, color: '#A4161A', tag_en: 'Must Try', tag_sv: 'Måste testas', imageSrc: 'images/cookies/red-velvet.jpg' }
         ];
 
         const CAKES = [
-            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc: 'A fusion of crunchy kataifi and sweet cream layers.', price: 75, color: '#E9C46A', tag: 'New', imageSrc: 'images/cakes/kunafa-jar.jpg' },
-            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc: 'A Swedish twist on the Italian classic with golden saffron notes.', price: 85, color: '#F4A261', tag: 'Signature', imageSrc: 'images/cakes/saffron-tiramisu.jpg' },
-            { id: 'rum-cake', name: 'Dark Rum Cake', desc: 'Dark and decadent butter cake infused with premium rum.', price: 65, color: '#264653', tag: 'Specialty', imageSrc: 'images/cakes/rum-cake.jpg' },
-            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc: 'Fresh, light sponge layered with Swedish strawberries and cream.', price: 75, color: '#EF476F', tag: 'Light', imageSrc: 'images/cakes/strawberry-jar.jpg' },
-            { id: 'choco-lava', name: 'Choco Lava Cake', desc: 'The ultimate warm-centered dessert for the true chocolate lover.', price: 60, color: '#1D1D1D', tag: 'Warm', imageSrc: 'images/cakes/choco-lava.jpg' }
+            { id: 'kunafa-jar', name: 'Kunafa Jar Cake', desc_en: 'A fusion of crunchy kataifi and sweet cream layers.', desc_sv: 'En fusion av krispig kataifi och söta lager av kräm.', price: 75, color: '#E9C46A', tag_en: 'New', tag_sv: 'Nyhet', imageSrc: 'images/cakes/kunafa-jar.jpg' },
+            { id: 'saffron-tiramisu', name: 'Saffron Tiramisu', desc_en: 'A Swedish twist on the Italian classic with golden saffron notes.', desc_sv: 'En svensk twist på den italienska klassikern med toner av saffran.', price: 85, color: '#F4A261', tag_en: 'Signature', tag_sv: 'Signatur', imageSrc: 'images/cakes/saffron-tiramisu.jpg' },
+            { id: 'rum-cake', name: 'Dark Rum Cake', desc_en: 'Dark and decadent butter cake infused with premium rum.', desc_sv: 'Mörk och dekadent smörkaka infuserad med premium rom.', price: 65, color: '#264653', tag_en: 'Specialty', tag_sv: 'Specialitet', imageSrc: 'images/cakes/rum-cake.jpg' },
+            { id: 'strawberry-jar', name: 'Strawberry Jar Cake', desc_en: 'Fresh, light sponge layered with Swedish strawberries and cream.', desc_sv: 'Lätt sockerkaka varvad med svenska jordgubbar och grädde.', price: 75, color: '#EF476F', tag_en: 'Light', tag_sv: 'Fräsch', imageSrc: 'images/cakes/strawberry-jar.jpg' },
+            { id: 'choco-lava', name: 'Choco Lava Cake', desc_en: 'The ultimate warm-centered dessert for the true chocolate lover.', desc_sv: 'Den ultimata desserten med varm kärna för chokladälskaren.', price: 60, color: '#1D1D1D', tag_en: 'Warm', tag_sv: 'Varm', imageSrc: 'images/cakes/choco-lava.jpg' }
         ];
 
         const BOX_OPTIONS = [
-            { size: 5, price: 165, title: 'The Taster Box', label: 'Box of 5', savings: 'Save 10%', imageSrc: 'images/boxes/taster.jpg' },
-            { size: 7, price: 225, title: 'The Weekender', label: 'Box of 7', savings: 'Save 15%', imageSrc: 'images/boxes/weekender.jpg' },
-            { size: 10, price: 295, title: 'The Fika Set', label: 'Box of 10', savings: 'Save 20%', imageSrc: 'images/boxes/fika-set.jpg' }
+            { size: 5, price: 165, title_en: 'The Taster Box', title_sv: 'Smakboxen', label_en: 'Box of 5', label_sv: 'Låda med 5', savings_en: 'Save 10%', savings_sv: 'Spara 10%', imageSrc: 'images/boxes/taster.jpg' },
+            { size: 7, price: 225, title_en: 'The Weekender', title_sv: 'Weekendboxen', label_en: 'Box of 7', label_sv: 'Låda med 7', savings_en: 'Save 15%', savings_sv: 'Spara 15%', imageSrc: 'images/boxes/weekender.jpg' },
+            { size: 10, price: 295, title_en: 'The Fika Set', title_sv: 'Fikasettet', label_en: 'Box of 10', label_sv: 'Låda med 10', savings_en: 'Save 20%', savings_sv: 'Spara 20%', imageSrc: 'images/boxes/fika-set.jpg' }
         ];
 
         const TESTIMONIALS = [
-            { name: "Sofia H.", text: "Best fika in Stockholm, hands down. The Pistachio Cream is literal magic.", handle: "@sofia_fika" },
-            { name: "Erik L.", text: "Finally a cookie that isn't just sweet but has actual depth. Brown butter makes it.", handle: "@erik_bakes" },
-            { name: "Maja W.", text: "Building my own box is so addictive. Perfect for office Friday snacks!", handle: "@maja_sthlm" }
+            { name: "Sofia H.", text_en: "Best fika in Stockholm, hands down. The Pistachio Cream is literal magic.", text_sv: "Bästa fikan i Stockholm, utan tvekan. Pistagekrämen är ren magi.", handle: "@sofia_fika" },
+            { name: "Erik L.", text_en: "Finally a cookie that isn't just sweet but has actual depth. Brown butter makes it.", text_sv: "Äntligen en kaka som inte bara är söt utan har djup. Det brynta smöret gör allt.", handle: "@erik_bakes" },
+            { name: "Maja W.", text_en: "Building my own box is so addictive. Perfect for office Friday snacks!", text_sv: "Att bygga sin egen box är beroendeframkallande. Perfekt för fredagsfikat på jobbet!", handle: "@maja_sthlm" }
         ];
 
         const QRCodeGenerator = ({ url, size = 140 }) => {
@@ -223,6 +371,7 @@
 
         const App = () => {
             const [view, setView] = useState('home');
+            const [lang, setLang] = useState('en');
             const [cart, setCart] = useState([]);
             const [selectedBoxSize, setSelectedBoxSize] = useState(null);
             const [currentBox, setCurrentBox] = useState([]);
@@ -240,13 +389,24 @@
                 paymentMethod: 'swish'
             });
 
+            // Helper to get translated string
+            const t = (key) => TRANSLATIONS[lang][key] || key;
+
             useEffect(() => {
                 const handleScroll = () => setScrolled(window.scrollY > 20);
                 window.addEventListener('scroll', handleScroll);
                 const consent = localStorage.getItem('cookie-consent');
                 if (!consent) setTimeout(() => setShowCookieBanner(true), 1500);
+                const savedLang = localStorage.getItem('site-lang');
+                if (savedLang) setLang(savedLang);
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
+
+            const toggleLang = () => {
+                const newLang = lang === 'en' ? 'sv' : 'en';
+                setLang(newLang);
+                localStorage.setItem('site-lang', newLang);
+            };
 
             const navigate = (to, sectionId = null) => {
                 setIsMobileMenuOpen(false);
@@ -292,19 +452,17 @@
 
             const addBoxToCart = () => {
                 const opt = BOX_OPTIONS.find(b => b.size === selectedBoxSize);
-                setCart([...cart, { id: Math.random(), name: opt.title, items: [...currentBox], price: opt.price, quantity: 1 }]);
+                setCart([...cart, { id: Math.random(), name: opt[`title_${lang}`], items: [...currentBox], price: opt.price, quantity: 1 }]);
                 setSelectedBoxSize(null);
                 setCurrentBox([]);
                 setIsCartOpen(true);
             };
 
-            // Email Validation Logic
             const isValidEmail = (email) => {
                 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return re.test(email);
             };
 
-            // Enhanced Phone Validation & Formatting
             const formatSwedishPhone = (input) => {
                 const digits = input.replace(/\D/g, '');
                 let formatted = digits.substring(0, 9);
@@ -324,7 +482,6 @@
             const handleCheckoutNext = () => setCheckoutStep(prev => prev + 1);
             const handleCheckoutBack = () => setCheckoutStep(prev => prev - 1);
 
-            // Unique Order ID Logic
             const generateUniqueOrderId = () => {
                 const prefix = "OMC";
                 const timestamp = Date.now().toString(36).toUpperCase(); 
@@ -341,7 +498,7 @@
                     customer_name: checkoutData.name,
                     customer_email: checkoutData.email,
                     customer_phone: checkoutData.phone,
-                    order_id: finalOrderId, // Uses the ID passed after generation
+                    order_id: finalOrderId,
                     total_price: totalPrice,
                     delivery_method: checkoutData.method === 'pickup' ? 'Store Pickup' : `Inner City Delivery`,
                     delivery_address: checkoutData.method === 'pickup' ? 'N/A' : checkoutData.address,
@@ -355,42 +512,27 @@
                 );
             };
 
-            // REFINED PAYMENT HANDLER
-            // Now strictly: Verify -> Generate ID -> Send Email -> Show Success
             const handleSwishPayment = () => {
                 setIsSwishProcessing(true);
-                
-                // 1. Simulate Swish payment verification delay
                 setTimeout(() => {
-                    // 2. Generate the ID only after verification is "complete"
                     const newId = generateUniqueOrderId();
                     setOrderId(newId);
-                    
-                    // 3. Trigger email notification with the newly generated ID
                     sendConfirmationEmail(newId)
-                        .then(() => {
-                            console.log('Order notification sent successfully.');
-                        })
-                        .catch((err) => {
-                            console.error('Notification failed but payment was verified:', err);
-                        })
                         .finally(() => {
-                            // 4. Move to success view and stop loader
                             setIsSwishProcessing(false);
                             setCheckoutStep(4);
                         });
-                        
-                }, 3000); // 3-second simulation for verification
+                }, 3000);
             };
 
             const swishLink = `swish://payment?address=0764349138&amount=${totalPrice}&message=Order%20OhMyCookie&edit=false`;
 
-            const navItems = [
-                { id: 'home', label: 'Home' },
-                { id: 'cookies', label: 'Cookies', section: 'cookies-section' },
-                { id: 'cakes', label: 'Cakes & Jars' },
-                { id: 'shop', label: 'Build Box' },
-                { id: 'about', label: 'About' }
+            const navLinks = [
+                { id: 'home', label: t('navHome') },
+                { id: 'cookies', label: t('navCookies'), section: 'cookies-section' },
+                { id: 'cakes', label: t('navCakes') },
+                { id: 'shop', label: t('navShop') },
+                { id: 'about', label: t('navAbout') }
             ];
 
             return (
@@ -406,8 +548,8 @@
                                 </span>
                             </div>
 
-                            <div className="hidden lg:flex gap-8">
-                                {navItems.map(item => (
+                            <div className="hidden lg:flex gap-8 items-center">
+                                {navLinks.map(item => (
                                     <button 
                                         key={item.id}
                                         onClick={() => navigate(item.id, item.section)}
@@ -416,6 +558,9 @@
                                         {item.label}
                                     </button>
                                 ))}
+                                <button onClick={toggleLang} className="ml-4 px-3 py-1.5 bg-[#4A3728] text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#D4A373] transition-colors">
+                                    {lang === 'en' ? 'Svenska' : 'English'}
+                                </button>
                             </div>
 
                             <div className="flex items-center gap-2 md:gap-4">
@@ -443,23 +588,26 @@
 
                     {isMobileMenuOpen && (
                         <div className="fixed inset-0 z-[100] bg-[#4A3728] text-white flex flex-col p-8 md:p-12 animate-in">
-                            <div className="flex justify-between items-center mb-16">
+                            <div className="flex justify-between items-center mb-10">
                                 <span className="font-black text-xl tracking-tighter uppercase">ohmycookie<span className="text-[#D4A373]">.se</span></span>
                                 <button onClick={() => setIsMobileMenuOpen(false)} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center">
                                     <Icon name="X" size={24} />
                                 </button>
                             </div>
-                            <div className="flex flex-col gap-8">
-                                {navItems.map((item, idx) => (
+                            <div className="flex flex-col gap-6">
+                                {navLinks.map((item, idx) => (
                                     <button 
                                         key={item.id}
                                         onClick={() => navigate(item.id, item.section)}
-                                        className="text-4xl md:text-6xl font-black text-left tracking-tighter hover:text-[#D4A373] transition-colors"
+                                        className="text-3xl md:text-6xl font-black text-left tracking-tighter hover:text-[#D4A373] transition-colors"
                                         style={{ animationDelay: `${idx * 0.1}s` }}
                                     >
                                         {item.label}
                                     </button>
                                 ))}
+                                <button onClick={toggleLang} className="text-left text-sm font-black text-[#D4A373] uppercase tracking-widest mt-4">
+                                    {lang === 'en' ? 'Switch to Svenska' : 'Switch to English'}
+                                </button>
                             </div>
                             <div className="mt-auto pt-10 border-t border-white/5 space-y-4">
                                 <p className="text-[#A09184] text-xs font-bold uppercase tracking-widest">Stockholm, Sweden</p>
@@ -479,24 +627,24 @@
                                         <CookieSVG color="#FFFFFF" className="w-full h-full scale-150 rotate-12" />
                                     </div>
                                     <div className="relative z-10 max-w-2xl space-y-6 md:space-y-8 animate-in text-center md:text-left mx-auto md:mx-0">
-                                        <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">Stockholm Bakery</div>
-                                        <h1 className="text-4xl sm:text-5xl md:text-8xl font-black text-white leading-[1.1] md:leading-[0.9] tracking-tighter">
-                                            THE ART <br className="hidden md:block"/>OF THE <br className="hidden md:block"/><span className="italic font-light text-[#D4A373]">Perfect</span> CRUNCH.
+                                        <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">{t('heroTag')}</div>
+                                        <h1 className="text-4xl sm:text-5xl md:text-8xl font-black text-white leading-[1.1] md:leading-[0.9] tracking-tighter whitespace-pre-line">
+                                            {t('heroTitle')}
                                         </h1>
-                                        <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto md:mx-0 leading-relaxed">Handcrafted cookies and specialty jar cakes. Fresh fika delivered across Stockholm.</p>
+                                        <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto md:mx-0 leading-relaxed">{t('heroSub')}</p>
                                         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6">
-                                            <button onClick={() => navigate('shop')} className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">Build Your Box</button>
-                                            <button onClick={() => navigate('home', 'cookies-section')} className="bg-white text-[#4A3728] px-8 py-5 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-[#D4A373] hover:text-white transition-all">Our Menu</button>
+                                            <button onClick={() => navigate('shop')} className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">{t('heroBtnShop')}</button>
+                                            <button onClick={() => navigate('home', 'cookies-section')} className="bg-white text-[#4A3728] px-8 py-5 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-[#D4A373] hover:text-white transition-all">{t('heroBtnMenu')}</button>
                                         </div>
                                     </div>
                                 </header>
                                 <section id="cookies-section" className="scroll-mt-32 space-y-12 md:space-y-16">
                                     <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 border-b border-[#F2E8DF] pb-10 text-center md:text-left">
                                         <div className="space-y-3">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#D4A373]">Fresh from the oven</span>
-                                            <h2 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter">Signature Cookies</h2>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#D4A373]">{t('secTag')}</span>
+                                            <h2 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter">{t('secTitle')}</h2>
                                         </div>
-                                        <p className="text-[#A09184] max-w-xs text-sm italic font-medium hidden md:block">Baking with 100% organic butter and premium cocoa.</p>
+                                        <p className="text-[#A09184] max-w-xs text-sm italic font-medium hidden md:block">{t('secSub')}</p>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                                         {COOKIES.map(cookie => (
@@ -505,15 +653,15 @@
                                                     <div className="absolute inset-0 bg-[#FAF9F6] flex items-center justify-center p-8 md:p-12">
                                                         <ProductImage src={cookie.imageSrc} color={cookie.color} alt={cookie.name} className="product-media" />
                                                     </div>
-                                                    {cookie.tag && (<div className="absolute top-4 left-4 glass-panel px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#4A3728]">{cookie.tag}</div>)}
+                                                    {cookie[`tag_${lang}`] && (<div className="absolute top-4 left-4 glass-panel px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#4A3728]">{cookie[`tag_${lang}`]}</div>)}
                                                 </div>
                                                 <div className="space-y-4">
                                                     <div className="flex justify-between items-start">
                                                         <h3 className="text-xl md:text-2xl font-black text-[#4A3728] tracking-tight">{cookie.name}</h3>
                                                         <span className="font-black text-base md:text-lg text-[#D4A373] whitespace-nowrap">{cookie.price} <span className="text-[10px]">SEK</span></span>
                                                     </div>
-                                                    <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cookie.desc}</p>
-                                                    <button onClick={() => addToCart(cookie.name, cookie.price)} className="w-full py-4 bg-[#F5EBE0]/40 text-[#4A3728] rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#4A3728] hover:text-white transition-all active:scale-95">Add to bag</button>
+                                                    <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cookie[`desc_${lang}`]}</p>
+                                                    <button onClick={() => addToCart(cookie.name, cookie.price)} className="w-full py-4 bg-[#F5EBE0]/40 text-[#4A3728] rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#4A3728] hover:text-white transition-all active:scale-95">{t('addBag')}</button>
                                                 </div>
                                             </div>
                                         ))}
@@ -525,9 +673,9 @@
                         {view === 'cakes' && (
                             <div className="max-w-7xl mx-auto space-y-12 md:space-y-20 animate-in pt-6">
                                 <header className="text-center space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#D4A373]">Specialty Collection</span>
-                                    <h1 className="text-4xl md:text-7xl font-black text-[#4A3728] tracking-tighter">Cakes & Jars</h1>
-                                    <p className="text-base md:text-lg text-[#A09184] leading-relaxed">Layered with fresh Swedish cream and high-quality infusions.</p>
+                                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#D4A373]">{t('cakeTag')}</span>
+                                    <h1 className="text-4xl md:text-7xl font-black text-[#4A3728] tracking-tighter">{t('cakeTitle')}</h1>
+                                    <p className="text-base md:text-lg text-[#A09184] leading-relaxed">{t('cakeSub')}</p>
                                 </header>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
                                     {CAKES.map(cake => (
@@ -536,15 +684,15 @@
                                                 <div className="w-24 h-24 md:w-32 md:h-32 group-hover:rotate-12 transition-transform duration-700">
                                                     <ProductImage src={cake.imageSrc} color={cake.color} alt={cake.name} />
                                                 </div>
-                                                <div className="absolute top-6 left-6"><span className="bg-white/90 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">{cake.tag}</span></div>
+                                                <div className="absolute top-6 left-6"><span className="bg-white/90 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">{cake[`tag_${lang}`]}</span></div>
                                             </div>
                                             <div className="p-6 md:p-8 space-y-4 md:space-y-5">
                                                 <div className="flex justify-between items-center">
                                                     <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">{cake.name}</h3>
                                                     <span className="text-[#D4A373] font-black text-sm md:text-base">{cake.price} SEK</span>
                                                 </div>
-                                                <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cake.desc}</p>
-                                                <button onClick={() => addToCart(cake.name, cake.price)} className="w-full py-4 md:py-5 bg-[#4A3728] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#D4A373] transition-colors flex items-center justify-center gap-2 active:scale-95"><Icon name="Plus" size={16} /> Add to bag</button>
+                                                <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cake[`desc_${lang}`]}</p>
+                                                <button onClick={() => addToCart(cake.name, cake.price)} className="w-full py-4 md:py-5 bg-[#4A3728] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#D4A373] transition-colors flex items-center justify-center gap-2 active:scale-95"><Icon name="Plus" size={16} /> {t('addBag')}</button>
                                             </div>
                                         </div>
                                     ))}
@@ -557,21 +705,21 @@
                                 {!selectedBoxSize ? (
                                     <div className="space-y-12 md:space-y-16">
                                         <div className="text-center space-y-4">
-                                            <h2 className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">Curate Your Fika Box</h2>
-                                            <p className="text-[#A09184]">Pick a size and fill it with your favorite flavors.</p>
+                                            <h2 className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">{t('boxTitle')}</h2>
+                                            <p className="text-[#A09184]">{t('boxSub')}</p>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
                                             {BOX_OPTIONS.map(box => (
                                                 <button key={box.size} onClick={() => setSelectedBoxSize(box.size)} className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-2 border-[#F2E8DF] hover:border-[#D4A373] transition-all group text-left space-y-6 md:space-y-8">
                                                     <div className="flex justify-between items-start">
                                                         <div className="w-12 h-12 md:w-16 md:h-16 bg-[#F5EBE0] rounded-2xl flex items-center justify-center text-[#4A3728] group-hover:bg-[#4A3728] group-hover:text-white transition-all overflow-hidden">
-                                                            <ProductImage src={box.imageSrc} color="#4A3728" alt={box.title} className="p-3" />
+                                                            <ProductImage src={box.imageSrc} color="#4A3728" alt={box[`title_${lang}`]} className="p-3" />
                                                         </div>
-                                                        <span className="bg-[#D4A373] text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{box.savings}</span>
+                                                        <span className="bg-[#D4A373] text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{box[`savings_${lang}`]}</span>
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-2xl md:text-3xl font-black text-[#4A3728]">{box.title}</h3>
-                                                        <p className="font-bold text-[#A09184] text-xs md:text-sm mt-1">{box.size} Handcrafted Cookies</p>
+                                                        <h3 className="text-2xl md:text-3xl font-black text-[#4A3728]">{box[`title_${lang}`]}</h3>
+                                                        <p className="font-bold text-[#A09184] text-xs md:text-sm mt-1">{box[`label_${lang}`]}</p>
                                                     </div>
                                                     <div className="flex justify-between items-end">
                                                         <span className="text-2xl md:text-3xl font-black text-[#4A3728]">{box.price} <span className="text-sm">SEK</span></span>
@@ -585,10 +733,10 @@
                                     <div className="grid lg:grid-cols-3 gap-8 md:gap-12 items-start">
                                         <div className="lg:col-span-2 space-y-6 md:space-y-10">
                                             <div className="flex justify-between items-center bg-white p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-[#F2E8DF]">
-                                                <button onClick={() => setSelectedBoxSize(null)} className="flex items-center gap-2 text-[10px] font-black uppercase text-[#A09184] hover:text-[#4A3728] transition-colors"><Icon name="ArrowLeft" size={14} /> Back</button>
+                                                <button onClick={() => setSelectedBoxSize(null)} className="flex items-center gap-2 text-[10px] font-black uppercase text-[#A09184] hover:text-[#4A3728] transition-colors"><Icon name="ArrowLeft" size={14} /> {t('back')}</button>
                                                 <div className="text-right">
-                                                    <h3 className="font-black text-[#4A3728] text-lg md:text-xl leading-none">{BOX_OPTIONS.find(b => b.size === selectedBoxSize).title}</h3>
-                                                    <p className="text-[10px] font-bold text-[#D4A373] uppercase tracking-widest mt-1">{currentBox.length} / {selectedBoxSize} added</p>
+                                                    <h3 className="font-black text-[#4A3728] text-lg md:text-xl leading-none">{BOX_OPTIONS.find(b => b.size === selectedBoxSize)[`title_${lang}`]}</h3>
+                                                    <p className="text-[10px] font-bold text-[#D4A373] uppercase tracking-widest mt-1">{currentBox.length} / {selectedBoxSize} {t('added')}</p>
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -599,7 +747,7 @@
                                                         </div>
                                                         <div className="flex-1 space-y-2">
                                                             <h4 className="font-black text-sm md:text-base text-[#4A3728] line-clamp-1">{cookie.name}</h4>
-                                                            <button onClick={() => {if(currentBox.length < selectedBoxSize) setCurrentBox([...currentBox, cookie])}} disabled={currentBox.length >= selectedBoxSize} className="px-4 py-2 bg-[#F5EBE0] text-[#4A3728] rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-[#4A3728] hover:text-white transition-all disabled:opacity-20 active:scale-95">Add</button>
+                                                            <button onClick={() => {if(currentBox.length < selectedBoxSize) setCurrentBox([...currentBox, cookie])}} disabled={currentBox.length >= selectedBoxSize} className="px-4 py-2 bg-[#F5EBE0] text-[#4A3728] rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-[#4A3728] hover:text-white transition-all disabled:opacity-20 active:scale-95">{t('addMore')}</button>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -607,7 +755,7 @@
                                         </div>
                                         <div className="lg:sticky lg:top-28 h-fit bg-[#4A3728] text-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl space-y-8 md:space-y-10">
                                             <div className="space-y-3">
-                                                <h3 className="text-xl md:text-2xl font-black tracking-tight">Your Box</h3>
+                                                <h3 className="text-xl md:text-2xl font-black tracking-tight">{t('summary')}</h3>
                                                 <div className="h-1.5 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-[#D4A373] transition-all duration-500" style={{ width: `${(currentBox.length/selectedBoxSize)*100}%` }}></div></div>
                                             </div>
                                             <div className="grid grid-cols-5 gap-2 md:gap-3">
@@ -622,7 +770,7 @@
                                                     </div>
                                                 ))}
                                             </div>
-                                            <button onClick={addBoxToCart} disabled={currentBox.length < selectedBoxSize} className="w-full py-4 md:py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all">{currentBox.length < selectedBoxSize ? `Add ${selectedBoxSize - currentBox.length} more` : 'Add Box to Bag'}</button>
+                                            <button onClick={addBoxToCart} disabled={currentBox.length < selectedBoxSize} className="w-full py-4 md:py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all">{currentBox.length < selectedBoxSize ? `${t('addMore')} ${selectedBoxSize - currentBox.length}` : t('boxAdded')}</button>
                                         </div>
                                     </div>
                                 )}
@@ -647,12 +795,12 @@
                                         {checkoutStep === 1 && (
                                             <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-[#F2E8DF] space-y-8 animate-in">
                                                 <div className="space-y-2">
-                                                    <h2 className="text-3xl font-black text-[#4A3728]">Your Details</h2>
-                                                    <p className="text-[#A09184] text-sm font-medium">Please enter your contact information.</p>
+                                                    <h2 className="text-3xl font-black text-[#4A3728]">{t('yourDetails')}</h2>
+                                                    <p className="text-[#A09184] text-sm font-medium">{t('detailSub')}</p>
                                                 </div>
                                                 <div className="grid gap-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">Full Name</label>
+                                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">{t('fullName')}</label>
                                                         <input 
                                                             type="text" 
                                                             placeholder="Stockholm Fika Enthusiast"
@@ -663,7 +811,7 @@
                                                     </div>
                                                     <div className="grid md:grid-cols-2 gap-6">
                                                         <div className="space-y-2">
-                                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">Email Address</label>
+                                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">{t('email')}</label>
                                                             <input 
                                                                 type="email" 
                                                                 placeholder="hello@ohmycookie.se"
@@ -671,14 +819,9 @@
                                                                 value={checkoutData.email}
                                                                 onChange={e => setCheckoutData({...checkoutData, email: e.target.value.toLowerCase().trim()})}
                                                             />
-                                                            {checkoutData.email && !isValidEmail(checkoutData.email) && (
-                                                                <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest ml-1 animate-in">
-                                                                    Please enter a valid email address
-                                                                </p>
-                                                            )}
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">Phone Number</label>
+                                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">{t('phone')}</label>
                                                             <div className="relative group">
                                                                 <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-[#4A3728]/40 text-sm md:text-base">+46</span>
                                                                 <input 
@@ -689,11 +832,6 @@
                                                                     onChange={e => setCheckoutData({...checkoutData, phone: formatSwedishPhone(e.target.value)})}
                                                                 />
                                                             </div>
-                                                            <p className="text-[10px] font-bold text-[#A09184] uppercase tracking-widest ml-1">
-                                                                {checkoutData.phone && !isValidSwedishPhone(checkoutData.phone) 
-                                                                    ? <span className="text-red-500 animate-in">Please enter a valid mobile number (7X ...)</span>
-                                                                    : 'Standard Swedish mobile format'}
-                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -702,7 +840,7 @@
                                                     disabled={!checkoutData.name || !isValidEmail(checkoutData.email) || !isValidSwedishPhone(checkoutData.phone)}
                                                     className="w-full py-5 bg-[#4A3728] text-white rounded-2xl font-black uppercase tracking-widest disabled:opacity-30 hover:bg-[#D4A373] transition-colors"
                                                 >
-                                                    Continue to Delivery
+                                                    {t('contDelivery')}
                                                 </button>
                                             </div>
                                         )}
@@ -710,8 +848,8 @@
                                         {checkoutStep === 2 && (
                                             <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-[#F2E8DF] space-y-10 animate-in">
                                                 <div className="space-y-2">
-                                                    <h2 className="text-3xl font-black text-[#4A3728]">Delivery Method</h2>
-                                                    <p className="text-[#A09184] text-sm font-medium">How would you like to receive your fika?</p>
+                                                    <h2 className="text-3xl font-black text-[#4A3728]">{t('delMethod')}</h2>
+                                                    <p className="text-[#A09184] text-sm font-medium">{t('delSub')}</p>
                                                 </div>
                                                 <div className="grid md:grid-cols-2 gap-6">
                                                     <button 
@@ -722,8 +860,8 @@
                                                             <Icon name="Store" size={20} />
                                                         </div>
                                                         <div>
-                                                            <h4 className="font-black">Store Pickup</h4>
-                                                            <p className={`text-xs mt-1 ${checkoutData.method === 'pickup' ? 'opacity-70' : 'text-[#A09184]'}`}>Free • Stockholm City</p>
+                                                            <h4 className="font-black">{t('pickup')}</h4>
+                                                            <p className={`text-xs mt-1 ${checkoutData.method === 'pickup' ? 'opacity-70' : 'text-[#A09184]'}`}>{t('pickupSub')}</p>
                                                         </div>
                                                     </button>
                                                     <button 
@@ -734,15 +872,15 @@
                                                             <Icon name="Truck" size={20} />
                                                         </div>
                                                         <div>
-                                                            <h4 className="font-black">Inner City Delivery</h4>
-                                                            <p className={`text-xs mt-1 ${checkoutData.method === 'delivery' ? 'opacity-70' : 'text-[#A09184]'}`}>49 SEK • Stockholm Area</p>
+                                                            <h4 className="font-black">{t('delivery')}</h4>
+                                                            <p className={`text-xs mt-1 ${checkoutData.method === 'delivery' ? 'opacity-70' : 'text-[#A09184]'}`}>{t('deliverySub')}</p>
                                                         </div>
                                                     </button>
                                                 </div>
 
                                                 {checkoutData.method === 'delivery' && (
                                                     <div className="space-y-2 animate-in">
-                                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">Delivery Address</label>
+                                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">{t('address')}</label>
                                                         <input 
                                                             type="text" 
                                                             placeholder="Drottninggatan 1, 111 21 Stockholm"
@@ -754,13 +892,13 @@
                                                 )}
 
                                                 <div className="flex gap-4">
-                                                    <button onClick={handleCheckoutBack} className="w-1/3 py-5 bg-[#FAF9F6] text-[#4A3728] rounded-2xl font-black uppercase tracking-widest border border-[#F2E8DF]">Back</button>
+                                                    <button onClick={handleCheckoutBack} className="w-1/3 py-5 bg-[#FAF9F6] text-[#4A3728] rounded-2xl font-black uppercase tracking-widest border border-[#F2E8DF]">{t('back')}</button>
                                                     <button 
                                                         onClick={handleCheckoutNext}
                                                         disabled={checkoutData.method === 'delivery' && !checkoutData.address}
                                                         className="flex-1 py-5 bg-[#4A3728] text-white rounded-2xl font-black uppercase tracking-widest disabled:opacity-30 hover:bg-[#D4A373] transition-colors"
                                                     >
-                                                        Go to Payment
+                                                        {t('goPayment')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -774,7 +912,7 @@
                                                             <Icon name="Smartphone" size={32} className="text-[#2D58A7]" />
                                                         </div>
                                                         <div className="text-center text-white">
-                                                            <h2 className="text-2xl font-black">Swish Payment</h2>
+                                                            <h2 className="text-2xl font-black">Swish</h2>
                                                             <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Pay Securely</p>
                                                         </div>
                                                     </div>
@@ -784,12 +922,12 @@
                                                             {isSwishProcessing ? (
                                                                 <div className="py-12 flex flex-col items-center gap-6 animate-pulse">
                                                                     <div className="swish-loader border-t-[#2D58A7]"></div>
-                                                                    <p className="text-[#2D58A7] font-black uppercase text-[10px] tracking-[0.2em]">Verifying Payment...</p>
+                                                                    <p className="text-[#2D58A7] font-black uppercase text-[10px] tracking-[0.2em]">{t('verifying')}</p>
                                                                 </div>
                                                             ) : (
                                                                 <>
                                                                     <div className="space-y-1">
-                                                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Amount</span>
+                                                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('totalAmount')}</span>
                                                                         <div className="text-4xl font-black text-[#2D58A7] tracking-tighter">{totalPrice} SEK</div>
                                                                     </div>
 
@@ -799,7 +937,7 @@
 
                                                                     <div className="space-y-4 pt-4">
                                                                         <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                                                                            <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Receiver</p>
+                                                                            <p className="text-[10px] font-black text-gray-400 uppercase mb-1">{t('receiver')}</p>
                                                                             <p className="font-black text-[#2D58A7]">076-434 91 38</p>
                                                                             <p className="text-[10px] font-bold text-gray-500 italic">PD / Oh My Cookie</p>
                                                                         </div>
@@ -813,13 +951,13 @@
                                                                                 }}
                                                                                 className="w-full py-4 bg-[#2D58A7] text-white rounded-xl font-black uppercase text-xs tracking-widest shadow-lg active:scale-95 transition-transform"
                                                                             >
-                                                                                Open Swish App
+                                                                                {t('openSwish')}
                                                                             </a>
                                                                             <button 
                                                                                 onClick={handleSwishPayment}
                                                                                 className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-[#2D58A7] transition-colors"
                                                                             >
-                                                                                Already Paid? Verify Now
+                                                                                {t('alreadyPaid')}
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -827,13 +965,9 @@
                                                             )}
                                                         </div>
                                                     </div>
-                                                    
-                                                    <div className="pb-8 text-center">
-                                                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.3em]">Secure Fika Protocol</p>
-                                                    </div>
                                                 </div>
 
-                                                <button onClick={handleCheckoutBack} className="w-full py-4 text-[#A09184] font-black uppercase text-[10px] tracking-widest hover:text-[#4A3728] transition-colors">Cancel Payment</button>
+                                                <button onClick={handleCheckoutBack} className="w-full py-4 text-[#A09184] font-black uppercase text-[10px] tracking-widest hover:text-[#4A3728] transition-colors">{t('back')}</button>
                                             </div>
                                         )}
 
@@ -843,20 +977,20 @@
                                                     <span className="text-[#4A3728]"><Icon name="Check" size={48} /></span>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <h2 className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">Order Confirmed!</h2>
-                                                    <p className="text-[#A09184] max-w-sm mx-auto">Tack, {checkoutData.name.split(' ')[0]}! We've received your order. We've sent a confirmation email to <span className="text-[#4A3728] font-bold">{checkoutData.email}</span>.</p>
+                                                    <h2 className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">{t('orderConfirmed')}</h2>
+                                                    <p className="text-[#A09184] max-w-sm mx-auto">{t('orderSub').replace('{name}', checkoutData.name.split(' ')[0]).replace('{email}', checkoutData.email)}</p>
                                                 </div>
                                                 <div className="bg-[#FAF9F6] p-8 rounded-3xl border border-[#F2E8DF] text-left space-y-4 max-w-sm mx-auto">
                                                     <div className="flex justify-between items-center pb-4 border-b border-[#F2E8DF]">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">Order ID</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">{t('orderId')}</span>
                                                         <span className="font-black text-xs">{orderId}</span>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <p className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">Collection/Delivery</p>
-                                                        <p className="font-bold text-sm">{checkoutData.method === 'pickup' ? 'Pickup at Stockholm Bakery' : checkoutData.address}</p>
+                                                        <p className="text-[10px] font-black uppercase tracking-widest text-[#A09184]">{t('collDel')}</p>
+                                                        <p className="font-bold text-sm">{checkoutData.method === 'pickup' ? t('pickup') : checkoutData.address}</p>
                                                     </div>
                                                 </div>
-                                                <button onClick={() => {setCart([]); navigate('home')}} className="px-12 py-5 bg-[#4A3728] text-white rounded-2xl font-black uppercase tracking-widest hover:bg-[#D4A373] transition-all shadow-xl">Back to Homepage</button>
+                                                <button onClick={() => {setCart([]); navigate('home')}} className="px-12 py-5 bg-[#4A3728] text-white rounded-2xl font-black uppercase tracking-widest hover:bg-[#D4A373] transition-all shadow-xl">{t('backHome')}</button>
                                             </div>
                                         )}
                                     </div>
@@ -866,7 +1000,7 @@
                                             <div className="bg-[#4A3728] text-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl space-y-8 animate-in">
                                                 <h3 className="text-2xl font-black tracking-tight flex items-center gap-3">
                                                     <ShoppingBagSVG size={24} className="text-[#D4A373]" />
-                                                    Summary
+                                                    {t('summary')}
                                                 </h3>
                                                 <div className="space-y-4 max-h-[300px] overflow-y-auto no-scrollbar pr-2">
                                                     {cart.map(item => (
@@ -881,15 +1015,15 @@
                                                 </div>
                                                 <div className="pt-8 border-t border-white/10 space-y-3">
                                                     <div className="flex justify-between text-sm">
-                                                        <span className="opacity-60 font-bold">Subtotal</span>
+                                                        <span className="opacity-60 font-bold">{t('subtotal')}</span>
                                                         <span className="font-black">{subtotal} SEK</span>
                                                     </div>
                                                     <div className="flex justify-between text-sm">
-                                                        <span className="opacity-60 font-bold">Delivery</span>
+                                                        <span className="opacity-60 font-bold">{t('deliveryFee')}</span>
                                                         <span className="font-black text-[#D4A373]">{deliveryFee > 0 ? `${deliveryFee} SEK` : 'Free'}</span>
                                                     </div>
                                                     <div className="flex justify-between items-end pt-4">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Total</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest opacity-60">{t('total')}</span>
                                                         <span className="text-4xl font-black tracking-tighter text-[#D4A373]">{totalPrice} SEK</span>
                                                     </div>
                                                 </div>
@@ -906,12 +1040,12 @@
                                     <div className="space-y-6 md:space-y-10 order-2 md:order-1 text-center md:text-left">
                                         <div className="space-y-3 md:space-y-4">
                                             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#D4A373]">Since 2024</span>
-                                            <h2 className="text-4xl md:text-7xl font-black text-[#4A3728] tracking-tighter leading-none">Small Batch, <br className="hidden md:block"/>Big Heart.</h2>
+                                            <h2 className="text-4xl md:text-7xl font-black text-[#4A3728] tracking-tighter leading-none whitespace-pre-line">{t('aboutTitle')}</h2>
                                         </div>
-                                        <p className="text-lg md:text-xl text-[#A09184] leading-relaxed italic">"Cookies meant for the moment you finally sit down and take a breath."</p>
+                                        <p className="text-lg md:text-xl text-[#A09184] leading-relaxed italic">"{t('aboutQuote')}"</p>
                                         <div className="space-y-6 text-[#A09184] text-sm md:text-base">
-                                            <p>Founded by PD, Oh! My Cookie started in a small Stockholm kitchen with one goal: to redefine the fika staple.</p>
-                                            <p>We use 100% organic Swedish butter and ethically sourced cocoa. No shortcuts, just craft.</p>
+                                            <p>{t('aboutP1')}</p>
+                                            <p>{t('aboutP2')}</p>
                                         </div>
                                     </div>
                                     <div className="order-1 md:order-2 bg-[#F5EBE0] rounded-[2.5rem] md:rounded-[4rem] aspect-square md:aspect-[4/5] flex items-center justify-center p-12 md:p-20">
@@ -920,13 +1054,13 @@
                                 </section>
                                 <div className="space-y-16">
                                     <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-                                        {TESTIMONIALS.map((t, i) => (
+                                        {TESTIMONIALS.map((t_data, i) => (
                                             <div key={i} className="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-[#F2E8DF] shadow-sm relative overflow-hidden">
                                                 <Icon name="Quote" size={40} className="text-[#F5EBE0]/50 absolute -right-2 -top-2" />
-                                                <p className="text-[#4A3728] text-base md:text-lg leading-relaxed mb-8 relative z-10">"{t.text}"</p>
+                                                <p className="text-[#4A3728] text-base md:text-lg leading-relaxed mb-8 relative z-10">"{t_data[`text_${lang}`]}"</p>
                                                 <div className="relative z-10">
-                                                    <div className="font-black text-[#4A3728]">{t.name}</div>
-                                                    <div className="text-[9px] font-black text-[#D4A373] uppercase tracking-widest">{t.handle}</div>
+                                                    <div className="font-black text-[#4A3728]">{t_data.name}</div>
+                                                    <div className="text-[9px] font-black text-[#D4A373] uppercase tracking-widest">{t_data.handle}</div>
                                                 </div>
                                             </div>
                                         ))}
@@ -940,12 +1074,12 @@
                                         <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 md:gap-20">
                                             <div className="flex-1 space-y-6 md:space-y-8 text-center md:text-left">
                                                 <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#D4A373]/20 border border-[#D4A373]/30">
-                                                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#D4A373]">Share the Love</span>
+                                                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#D4A373]">{t('shareLove')}</span>
                                                 </div>
-                                                <h2 className="text-3xl md:text-6xl font-black tracking-tighter leading-none">Love our cookies? <br className="md:hidden" /><span className="text-[#D4A373]">Leave a review!</span></h2>
-                                                <p className="text-[#A09184] text-sm md:text-lg max-w-xl mx-auto md:mx-0">Your feedback helps us perfect every batch. Scan the code or click the button below to leave a review on Google.</p>
+                                                <h2 className="text-3xl md:text-6xl font-black tracking-tighter leading-none">{t('reviewTitle')} <br className="md:hidden" /><span className="text-[#D4A373]">{t('reviewTitleColor')}</span></h2>
+                                                <p className="text-[#A09184] text-sm md:text-lg max-w-xl mx-auto md:mx-0">{t('reviewSub')}</p>
                                                 <a href="https://g.page/r/CWZv_BvtbH5gEBM/review" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">
-                                                    <Icon name="ExternalLink" size={16} /> Write Review
+                                                    <Icon name="ExternalLink" size={16} /> {t('writeReview')}
                                                 </a>
                                             </div>
                                             <div className="shrink-0 space-y-4">
@@ -954,7 +1088,7 @@
                                                         <QRCodeGenerator url="https://g.page/r/CWZv_BvtbH5gEBM/review" />
                                                     </div>
                                                 </div>
-                                                <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">Scan to Review</p>
+                                                <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">{t('scanReview')}</p>
                                             </div>
                                         </div>
                                     </section>
@@ -965,7 +1099,7 @@
                         {view === 'privacy' && (
                             <div className="max-w-4xl mx-auto py-12 md:py-20 space-y-12 md:space-y-16 animate-in">
                                 <div className="space-y-4 text-center md:text-left border-b border-[#F2E8DF] pb-10">
-                                    <h1 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter leading-none">Privacy Policy</h1>
+                                    <h1 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter leading-none">{t('privacyTitle')}</h1>
                                     <p className="text-[#A09184] font-medium tracking-widest uppercase text-[10px]">Effective: March 14, 2026</p>
                                 </div>
                                 <div className="space-y-10 text-[#A09184] leading-relaxed text-sm md:text-base">
@@ -974,57 +1108,38 @@
                                         <p>At Oh My Cookie, we respect your privacy and are committed to protecting the personal data you share with us. This policy outlines how we handle your information in accordance with Swedish law and GDPR standards.</p>
                                     </section>
 
-                                    <section className="space-y-6">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728] border-l-4 border-[#D4A373] pl-6">2. Information We Collect</h3>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-[#FAF9F6] p-6 rounded-2xl">
-                                                <span className="block text-[#4A3728] font-black text-xs uppercase mb-2">Order Fulfillment</span>
-                                                <p className="text-xs">We collect your name, email, phone number, and delivery address to process your fika orders and verify your identity during store pickup.</p>
-                                            </div>
-                                            <div className="bg-[#FAF9F6] p-6 rounded-2xl">
-                                                <span className="block text-[#4A3728] font-black text-xs uppercase mb-2">Communications</span>
-                                                <p className="text-xs">If you contact us via email or social media, we may keep a record of that correspondence to better serve your requests.</p>
-                                            </div>
-                                        </div>
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">2. Data Collection</h3>
+                                        <p>We collect essential information required to fulfill your orders, including your full name, email address, phone number, and delivery address (where applicable). This data is provided voluntarily by you during the checkout process.</p>
                                     </section>
 
-                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF]">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">3. Data Security & Storage</h3>
-                                        <p>We implement industry-standard security measures to safeguard your information. We do not store credit card details; all financial transactions are handled securely via third-party providers like Swish.</p>
-                                        <p className="text-xs italic">Data is stored only as long as necessary to fulfill the purposes for which it was collected, or as required by Swedish accounting laws.</p>
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">3. Use of Information</h3>
+                                        <p>Your data is used strictly for order processing, providing order updates via email, and facilitating delivery or pickup. We do not use your information for unsolicited marketing unless you explicitly opt-in to our newsletter.</p>
                                     </section>
 
-                                    <section className="space-y-6">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728] border-l-4 border-[#D4A373] pl-6">4. Your Rights (GDPR)</h3>
-                                        <p>Under the General Data Protection Regulation, you have the following rights regarding your personal data:</p>
-                                        <ul className="grid gap-3">
-                                            <li className="flex gap-4 items-start">
-                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
-                                                <p><span className="font-bold text-[#4A3728]">Access:</span> You can request a copy of the data we hold about you.</p>
-                                            </li>
-                                            <li className="flex gap-4 items-start">
-                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
-                                                <p><span className="font-bold text-[#4A3728]">Correction:</span> You can ask us to correct inaccurate or incomplete information.</p>
-                                            </li>
-                                            <li className="flex gap-4 items-start">
-                                                <div className="w-6 h-6 rounded-full bg-[#D4A373]/20 flex items-center justify-center shrink-0 mt-1"><Icon name="Check" size={12} className="text-[#D4A373]" /></div>
-                                                <p><span className="font-bold text-[#4A3728]">Deletion:</span> You can request that we delete your personal data when it is no longer needed.</p>
-                                            </li>
-                                        </ul>
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">4. Payment Security</h3>
+                                        <p>We use Swish for all transactions. Oh My Cookie does not store your bank account details or credit card information on our servers. All payment verification is handled through secure, third-party protocols.</p>
                                     </section>
 
-                                    <section className="bg-[#4A3728] p-8 md:p-10 rounded-[2.5rem] text-white space-y-4">
-                                        <h3 className="text-xl font-black text-[#D4A373]">5. Contact Us</h3>
-                                        <p className="text-sm opacity-80 leading-relaxed">If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact our Data Protection Officer at:</p>
-                                        <div className="pt-2">
-                                            <p className="font-black">BLUDEN AB</p>
-                                            <p className="text-xs opacity-60">Stockholm, Sweden</p>
-                                            <p className="text-[#D4A373] font-bold mt-2">hello@ohmycookie.se</p>
-                                        </div>
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">5. Third-Party Sharing</h3>
+                                        <p>We share necessary order details with service providers like EmailJS for confirmation emails. These parties are contractually obligated to protect your data and are prohibited from using it for any other purpose.</p>
+                                    </section>
+
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">6. Data Retention</h3>
+                                        <p>We retain your order information only for as long as necessary to fulfill legal and accounting requirements in Sweden. After this period, personal data is securely deleted or anonymized.</p>
+                                    </section>
+
+                                    <section className="space-y-4 bg-white p-8 md:p-10 rounded-[2.5rem] border border-[#F2E8DF] shadow-sm">
+                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728]">7. Your Rights</h3>
+                                        <p>Under GDPR, you have the right to access, correct, or request the deletion of your personal data. If you wish to exercise these rights, please contact us at hello@ohmycookie.se.</p>
                                     </section>
 
                                     <div className="text-center pt-10">
-                                        <button onClick={() => setView('home')} className="px-10 py-5 bg-[#FAF9F6] border border-[#F2E8DF] text-[#4A3728] rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">Back to Home</button>
+                                        <button onClick={() => setView('home')} className="px-10 py-5 bg-[#FAF9F6] border border-[#F2E8DF] text-[#4A3728] rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">{t('back')}</button>
                                     </div>
                                 </div>
                             </div>
@@ -1043,11 +1158,11 @@
                             <div className="space-y-6">
                                 <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#D4A373]">Fika Links</h4>
                                 <ul className="space-y-3 text-sm font-bold text-[#A09184]">
-                                    <li><button onClick={() => navigate('shop')} className="hover:text-white transition-colors">Order Now</button></li>
-                                    <li><button onClick={() => navigate('cakes')} className="hover:text-white transition-colors">Jar Cakes</button></li>
-                                    <li><button onClick={() => navigate('about')} className="hover:text-white transition-colors">Our Kitchen</button></li>
-                                    <li><a href="https://g.page/r/CWZv_BvtbH5gEBM/review" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Write Review</a></li>
-                                    <li><button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">Privacy Policy</button></li>
+                                    <li><button onClick={() => navigate('shop')} className="hover:text-white transition-colors">{t('navShop')}</button></li>
+                                    <li><button onClick={() => navigate('cakes')} className="hover:text-white transition-colors">{t('navCakes')}</button></li>
+                                    <li><button onClick={() => navigate('about')} className="hover:text-white transition-colors">{t('navAbout')}</button></li>
+                                    <li><a href="https://g.page/r/CWZv_BvtbH5gEBM/review" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Write a review</a></li>
+                                    <li><button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">{t('privacyTitle')}</button></li>
                                 </ul>
                             </div>
                             <div className="space-y-6">
@@ -1067,14 +1182,14 @@
                             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsCartOpen(false)} />
                             <div className="relative w-full sm:max-w-md bg-white h-full p-8 md:p-12 flex flex-col shadow-2xl animate-in">
                                 <div className="flex justify-between items-center mb-10 md:mb-12">
-                                    <h2 className="text-3xl md:text-4xl font-black text-[#4A3728] tracking-tighter leading-none">Your Bag</h2>
+                                    <h2 className="text-3xl md:text-4xl font-black text-[#4A3728] tracking-tighter leading-none">{t('bag')}</h2>
                                     <button onClick={() => setIsCartOpen(false)} className="p-3 md:p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors"><Icon name="X" size={20} /></button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 md:space-y-6">
                                     {cart.length === 0 ? (
                                         <div className="text-center py-20 opacity-20">
                                             <ShoppingBagSVG size={48} className="mx-auto mb-4" />
-                                            <p className="font-black text-sm uppercase tracking-widest">Bag is empty</p>
+                                            <p className="font-black text-sm uppercase tracking-widest">{t('bagEmpty')}</p>
                                         </div>
                                     ) : (
                                         cart.map(item => (
@@ -1087,8 +1202,8 @@
                                 </div>
                                 {cart.length > 0 && (
                                     <div className="pt-8 md:pt-10 space-y-6">
-                                        <div className="flex justify-between items-end"><span className="text-[10px] font-black uppercase text-[#A09184] tracking-[0.3em]">Subtotal</span><span className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">{subtotal} SEK</span></div>
-                                        <button onClick={() => navigate('checkout')} className="w-full py-5 md:py-6 bg-[#4A3728] text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#D4A373] transition-colors active:scale-95">Proceed to Checkout</button>
+                                        <div className="flex justify-between items-end"><span className="text-[10px] font-black uppercase text-[#A09184] tracking-[0.3em]">{t('subtotal')}</span><span className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">{subtotal} SEK</span></div>
+                                        <button onClick={() => navigate('checkout')} className="w-full py-5 md:py-6 bg-[#4A3728] text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#D4A373] transition-colors active:scale-95">{t('proceedCheckout')}</button>
                                     </div>
                                 )}
                             </div>
@@ -1100,11 +1215,11 @@
                             <div className="bg-[#4A3728] p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl text-white space-y-6">
                                 <div className="flex gap-4">
                                     <div className="bg-[#D4A373] p-3 rounded-2xl h-fit shrink-0"><Icon name="Cookie" size={24} className="text-[#4A3728]" /></div>
-                                    <div className="space-y-1"><h3 className="font-black text-lg md:text-xl leading-none">Cookie Policy</h3><p className="text-[11px] text-[#A09184] leading-relaxed">We use essential cookies to remember your box fika selections. No tracking involved.</p></div>
+                                    <div className="space-y-1"><h3 className="font-black text-lg md:text-xl leading-none">{t('cookieTitle')}</h3><p className="text-[11px] text-[#A09184] leading-relaxed">{t('cookieSub')}</p></div>
                                 </div>
                                 <div className="flex gap-3">
-                                    <button onClick={() => {localStorage.setItem('cookie-consent', 'true'); setShowCookieBanner(false)}} className="flex-1 py-3 md:py-4 bg-white text-[#4A3728] rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#D4A373] hover:text-white transition-all">Accept</button>
-                                    <button onClick={() => setShowCookieBanner(false)} className="px-5 py-3 md:py-4 bg-white/10 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all">Close</button>
+                                    <button onClick={() => {localStorage.setItem('cookie-consent', 'true'); setShowCookieBanner(false)}} className="flex-1 py-3 md:py-4 bg-white text-[#4A3728] rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#D4A373] hover:text-white transition-all">{t('accept')}</button>
+                                    <button onClick={() => setShowCookieBanner(false)} className="px-5 py-3 md:py-4 bg-white/10 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all">{t('close')}</button>
                                 </div>
                             </div>
                         </div>
