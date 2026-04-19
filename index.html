@@ -153,7 +153,7 @@
                 verifying: "Verifying Payment...",
                 totalAmount: "Total Amount",
                 receiver: "Receiver",
-                openSwish: "Open Swish App",
+                openSwish: "I HAVE SWISHE-ED",
                 alreadyPaid: "Already Paid? Verify Now",
                 orderConfirmed: "Order Confirmed!",
                 orderSub: "Tack, {name}! We've received your order. We've sent a confirmation email to {email}.",
@@ -225,7 +225,7 @@
                 verifying: "Verifierar betalning...",
                 totalAmount: "Totalbelopp",
                 receiver: "Mottagare",
-                openSwish: "Öppna Swish-appen",
+                openSwish: "JAG HAR SWISHAT",
                 alreadyPaid: "Redan betalat? Verifiera nu",
                 orderConfirmed: "Order Bekräftad!",
                 orderSub: "Tack, {name}! Vi har tagit emot din beställning. Vi har skickat en bekräftelse till {email}.",
@@ -490,7 +490,20 @@
             };
 
             const sendConfirmationEmail = (finalOrderId) => {
-                const itemsList = cart.map(item => `- ${item.name} (x${item.quantity}): ${item.price * item.quantity} SEK`).join('\n');
+                const itemsList = cart.map(item => {
+                    let line = `- ${item.name} (x${item.quantity}): ${item.price * item.quantity} SEK`;
+                    if (item.items && item.items.length > 0) {
+                        const subCounts = {};
+                        item.items.forEach(sub => {
+                            subCounts[sub.name] = (subCounts[sub.name] || 0) + 1;
+                        });
+                        const subLines = Object.entries(subCounts)
+                            .map(([subName, count]) => `    • ${count}x ${subName}`)
+                            .join('\n');
+                        line += '\n' + subLines;
+                    }
+                    return line;
+                }).join('\n\n');
                 
                 const templateParams = {
                     to_name: "Oh My Cookie Admin",
