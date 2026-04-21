@@ -79,7 +79,7 @@
             margin: auto;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: #D4A373;
             box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.1);
@@ -175,6 +175,8 @@
                 writeReview: "Write a Review",
                 scanReview: "Scan to Review",
                 privacyTitle: "Privacy Policy",
+                specialInst: "Special Instructions (Optional)",
+                specialInstPlaceholder: "e.g., allergies, lactose-free, no nuts",
                 bag: "Your Bag",
                 bagEmpty: "Bag is empty",
                 proceedCheckout: "Proceed to Checkout",
@@ -247,6 +249,8 @@
                 writeReview: "Skriv ett omdöme",
                 scanReview: "Skanna för omdöme",
                 privacyTitle: "Integritetspolicy",
+                specialInst: "Särskilda instruktioner (Valfritt)",
+                specialInstPlaceholder: "t.ex. allergier, laktosfritt, inga nötter",
                 bag: "Din påse",
                 bagEmpty: "Påsen är tom",
                 proceedCheckout: "Gå till kassan",
@@ -386,7 +390,7 @@
             const [checkoutData, setCheckoutData] = useState({
                 name: '', email: '', phone: '',
                 method: 'pickup', address: '',
-                paymentMethod: 'swish'
+                paymentMethod: 'swish', instructions: ''
             });
 
             // Helper to get translated string
@@ -505,6 +509,11 @@
                     return line;
                 }).join('\n\n');
                 
+                let finalItemsDetails = itemsList;
+                if (checkoutData.instructions && checkoutData.instructions.trim() !== '') {
+                    finalItemsDetails += `\n\n--- Special Instructions ---\n${checkoutData.instructions}`;
+                }
+
                 const templateParams = {
                     to_name: "Oh My Cookie Admin",
                     to_email: "np636660@gmail.com",
@@ -515,7 +524,7 @@
                     total_price: totalPrice,
                     delivery_method: checkoutData.method === 'pickup' ? 'Store Pickup' : `Inner City Delivery`,
                     delivery_address: checkoutData.method === 'pickup' ? 'N/A' : checkoutData.address,
-                    items_details: itemsList
+                    items_details: finalItemsDetails
                 };
 
                 return emailjs.send(
@@ -846,6 +855,15 @@
                                                                 />
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/60 ml-1">{t('specialInst')}</label>
+                                                        <textarea 
+                                                            placeholder={t('specialInstPlaceholder')}
+                                                            className="w-full px-6 py-4 bg-[#FAF9F6] border border-[#F2E8DF] rounded-2xl font-bold resize-none h-24"
+                                                            value={checkoutData.instructions}
+                                                            onChange={e => setCheckoutData({...checkoutData, instructions: e.target.value})}
+                                                        ></textarea>
                                                     </div>
                                                 </div>
                                                 <button 
