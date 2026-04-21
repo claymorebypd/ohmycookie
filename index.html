@@ -131,6 +131,7 @@
                 cakeSub: "Layered with fresh Swedish cream and high-quality infusions.",
                 boxTitle: "Curate Your Fika Box",
                 boxSub: "Pick a size and fill it with your favorite flavors.",
+                from: "From",
                 back: "Back",
                 added: "added",
                 boxAdded: "Add Box to Bag",
@@ -205,6 +206,7 @@
                 cakeSub: "Lager med färsk svensk grädde och ingredienser av högsta kvalitet.",
                 boxTitle: "Skapa din egen Fika-box",
                 boxSub: "Välj storlek och fyll den med dina favoritfyllningar.",
+                from: "Från",
                 back: "Tillbaka",
                 added: "valda",
                 boxAdded: "Lägg boxen i påsen",
@@ -332,7 +334,10 @@
             { id: 'pistachio', name: 'Pistachio Cookie', desc_en: 'Rich roasted pistachio dough with a silky pistachio cream center.', desc_sv: 'Lyxig deg på rostade pistagenötter med en silkeslen pistagekräm i mitten.', price: 42, color: '#B5C99A', tag_en: 'Best Seller', tag_sv: 'Bästsäljare', imageSrc: 'images/cookies/pistachio.jpg' },
             { id: 'biscoff-white', name: 'Biscoff White Choco', desc_en: 'Caramelized Biscoff spread core topped with white chocolate drizzles.', desc_sv: 'Kärna av karamelliserad Biscoff toppad med vit choklad.', price: 38, color: '#D4A373', tag_en: 'Best Seller', tag_sv: 'Bästsäljare', imageSrc: 'images/cookies/biscoff.jpg' },
             { id: 'brown-butter', name: 'Brown Butter Choco', desc_en: 'Nutty brown butter dough loaded with 70% dark chocolate chunks and sea salt.', desc_sv: 'Deg på brynt smör fylld med 70% mörk choklad och flingsalt.', price: 35, color: '#8B5E3C', tag_en: 'The Classic', tag_sv: 'Klassikern', imageSrc: 'images/cookies/brown-butter.jpg' },
-            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc_en: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', desc_sv: 'Kakao-deg med en fyllning av krämig och syrlig cream cheese-frosting.', price: 40, color: '#A4161A', tag_en: 'Must Try', tag_sv: 'Måste testas', imageSrc: 'images/cookies/red-velvet.jpg' }
+            { id: 'double-chocolate', name: 'Double Chocolate', desc_en: 'Decadent dark chocolate dough loaded with rich milk chocolate chunks.', desc_sv: 'Dekadent mörk chokladdeg fylld med rika mjölkchokladbitar.', price: 38, color: '#3E2723', tag_en: 'Rich', tag_sv: 'Mustig', imageSrc: 'images/cookies/double-chocolate.jpg' },
+            { id: 'red-velvet', name: 'Red Velvet Cheesecake', desc_en: 'Vibrant cocoa dough with a thick, tangy cream cheese frosting filling.', desc_sv: 'Kakao-deg med en fyllning av krämig och syrlig cream cheese-frosting.', price: 45, color: '#A4161A', tag_en: 'Must Try', tag_sv: 'Måste testas', imageSrc: 'images/cookies/red-velvet.jpg' },
+            { id: 'raspberry-lemon-cheese', name: 'Raspberry Lemon Cheese', desc_en: 'Zesty lemon dough filled with creamy cheesecake and tart raspberry jam.', desc_sv: 'Frisk citrondeg fylld med krämig cheesecake och syrlig hallonsylt.', price: 40, color: '#D46A6A', tag_en: 'Fruity', tag_sv: 'Fruktig', imageSrc: 'images/cookies/raspberry-lemon-cheese.jpg' },
+            { id: 'blueberry-lemon-cheese', name: 'Blueberry Lemon Cheese', desc_en: 'Refreshing lemon dough packed with wild blueberries and a rich cream cheese center.', desc_sv: 'Uppfriskande citrondeg fylld med vilda blåbär och en rik cream cheese-kärna.', price: 40, color: '#5E5A80', tag_en: 'New', tag_sv: 'Nyhet', imageSrc: 'images/cookies/blueberry-lemon-cheese.jpg' }
         ];
 
         const CAKES = [
@@ -344,9 +349,9 @@
         ];
 
         const BOX_OPTIONS = [
-            { size: 5, price: 165, title_en: 'The Taster Box', title_sv: 'Smakboxen', label_en: 'Box of 5', label_sv: 'Låda med 5', savings_en: 'Save 10%', savings_sv: 'Spara 10%', imageSrc: 'images/boxes/taster.jpg' },
-            { size: 7, price: 225, title_en: 'The Weekender', title_sv: 'Weekendboxen', label_en: 'Box of 7', label_sv: 'Låda med 7', savings_en: 'Save 15%', savings_sv: 'Spara 15%', imageSrc: 'images/boxes/weekender.jpg' },
-            { size: 10, price: 295, title_en: 'The Fika Set', title_sv: 'Fikasettet', label_en: 'Box of 10', label_sv: 'Låda med 10', savings_en: 'Save 20%', savings_sv: 'Spara 20%', imageSrc: 'images/boxes/fika-set.jpg' }
+            { size: 5, discount: 0.10, title_en: 'The Taster Box', title_sv: 'Smakboxen', label_en: 'Box of 5', label_sv: 'Låda med 5', savings_en: 'Save 10%', savings_sv: 'Spara 10%', imageSrc: 'images/boxes/taster.jpg' },
+            { size: 7, discount: 0.15, title_en: 'The Weekender', title_sv: 'Weekendboxen', label_en: 'Box of 7', label_sv: 'Låda med 7', savings_en: 'Save 15%', savings_sv: 'Spara 15%', imageSrc: 'images/boxes/weekender.jpg' },
+            { size: 10, discount: 0.20, title_en: 'The Fika Set', title_sv: 'Fikasettet', label_en: 'Box of 10', label_sv: 'Låda med 10', savings_en: 'Save 20%', savings_sv: 'Spara 20%', imageSrc: 'images/boxes/fika-set.jpg' }
         ];
 
         const TESTIMONIALS = [
@@ -454,9 +459,16 @@
                 setCart(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(0, i.quantity + delta) } : i).filter(i => i.quantity > 0));
             };
 
+            // Calculate current exact total for box if full
+            const currentBoxOption = BOX_OPTIONS.find(b => b.size === selectedBoxSize);
+            const isBoxFull = selectedBoxSize && currentBox.length === selectedBoxSize;
+            const finalBoxPrice = isBoxFull && currentBoxOption 
+                ? Math.round(currentBox.reduce((sum, c) => sum + c.price, 0) * (1 - currentBoxOption.discount)) 
+                : 0;
+
             const addBoxToCart = () => {
-                const opt = BOX_OPTIONS.find(b => b.size === selectedBoxSize);
-                setCart([...cart, { id: Math.random(), name: opt[`title_${lang}`], items: [...currentBox], price: opt.price, quantity: 1 }]);
+                if (!isBoxFull) return;
+                setCart([...cart, { id: Math.random(), name: currentBoxOption[`title_${lang}`], items: [...currentBox], price: finalBoxPrice, quantity: 1 }]);
                 setSelectedBoxSize(null);
                 setCurrentBox([]);
                 setIsCartOpen(true);
@@ -664,7 +676,7 @@
                                     <div className="relative z-10 lg:w-1/2 w-full h-[300px] sm:h-[400px] lg:h-[500px] animate-in" style={{ animationDelay: '0.2s' }}>
                                         <div className="w-full h-full bg-[#FAF9F6]/10 rounded-[2rem] md:rounded-[3rem] overflow-hidden border-4 border-white/5 shadow-2xl group relative">
                                             <ProductImage 
-                                                src="images/hero/hero.jpeg" 
+                                                src="images/cookies/hero.jpg" 
                                                 color="#D4A373" 
                                                 alt="Oh My Cookie Hero" 
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
@@ -753,7 +765,11 @@
                                             <p className="text-[#A09184]">{t('boxSub')}</p>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
-                                            {BOX_OPTIONS.map(box => (
+                                            {BOX_OPTIONS.map(box => {
+                                                const minCookiePrice = Math.min(...COOKIES.map(c => c.price));
+                                                const startingPrice = Math.round(box.size * minCookiePrice * (1 - box.discount));
+                                                
+                                                return (
                                                 <button key={box.size} onClick={() => setSelectedBoxSize(box.size)} className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-2 border-[#F2E8DF] hover:border-[#D4A373] transition-all group text-left space-y-6 md:space-y-8">
                                                     <div className="flex justify-between items-start">
                                                         <div className="w-12 h-12 md:w-16 md:h-16 bg-[#F5EBE0] rounded-2xl flex items-center justify-center text-[#4A3728] group-hover:bg-[#4A3728] group-hover:text-white transition-all overflow-hidden">
@@ -766,11 +782,14 @@
                                                         <p className="font-bold text-[#A09184] text-xs md:text-sm mt-1">{box[`label_${lang}`]}</p>
                                                     </div>
                                                     <div className="flex justify-between items-end">
-                                                        <span className="text-2xl md:text-3xl font-black text-[#4A3728]">{box.price} <span className="text-sm">SEK</span></span>
+                                                        <span className="text-2xl md:text-3xl font-black text-[#4A3728]">
+                                                            <span className="text-sm mr-1 font-bold text-[#A09184]">{t('from')}</span>
+                                                            {startingPrice} <span className="text-sm">SEK</span>
+                                                        </span>
                                                         <span className="p-3 bg-gray-50 rounded-xl group-hover:translate-x-1 transition-transform"><Icon name="ArrowRight" size={20} /></span>
                                                     </div>
                                                 </button>
-                                            ))}
+                                            )})}
                                         </div>
                                     </div>
                                 ) : (
@@ -790,7 +809,10 @@
                                                             <ProductImage src={cookie.imageSrc} color={cookie.color} alt={cookie.name} className="p-3" />
                                                         </div>
                                                         <div className="flex-1 space-y-2">
-                                                            <h4 className="font-black text-sm md:text-base text-[#4A3728] line-clamp-1">{cookie.name}</h4>
+                                                            <h4 className="font-black text-sm md:text-base text-[#4A3728] line-clamp-1">
+                                                                {cookie.name} 
+                                                                <span className="block mt-0.5 text-[10px] font-bold text-[#D4A373] uppercase">{cookie.price} SEK</span>
+                                                            </h4>
                                                             <button onClick={() => {if(currentBox.length < selectedBoxSize) setCurrentBox([...currentBox, cookie])}} disabled={currentBox.length >= selectedBoxSize} className="px-4 py-2 bg-[#F5EBE0] text-[#4A3728] rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-[#4A3728] hover:text-white transition-all disabled:opacity-20 active:scale-95">{t('addMore')}</button>
                                                         </div>
                                                     </div>
@@ -814,7 +836,9 @@
                                                     </div>
                                                 ))}
                                             </div>
-                                            <button onClick={addBoxToCart} disabled={currentBox.length < selectedBoxSize} className="w-full py-4 md:py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all">{currentBox.length < selectedBoxSize ? `${t('addMore')} ${selectedBoxSize - currentBox.length}` : t('boxAdded')}</button>
+                                            <button onClick={addBoxToCart} disabled={!isBoxFull} className="w-full py-4 md:py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all">
+                                                {isBoxFull ? `${t('boxAdded')} • ${finalBoxPrice} SEK` : `${t('addMore')} ${selectedBoxSize - currentBox.length}`}
+                                            </button>
                                         </div>
                                     </div>
                                 )}
