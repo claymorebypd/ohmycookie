@@ -32,7 +32,7 @@
             overflow-x: hidden;
         }
 
-        .animate-in { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .animate-in { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fadeIn { 
             from { opacity: 0; transform: translateY(20px); } 
             to { opacity: 1; transform: translateY(0); } 
@@ -118,7 +118,7 @@
                 navShop: "Build Box",
                 navAbout: "About",
                 heroTag: "Stockholm Bakery",
-                heroTitle: "THE ART OF CHEWY & GOOEY.",
+                heroTitle: "THE ART OF\nCHEWY & GOOEY.",
                 heroSub: "Handcrafted cookies and specialty jar cakes. Fresh fika delivered across Stockholm.",
                 heroBtnShop: "Build Your Box",
                 heroBtnMenu: "Our Menu",
@@ -192,7 +192,7 @@
                 navShop: "Bygg Box",
                 navAbout: "Om oss",
                 heroTag: "Stockholms Bageri",
-                heroTitle: "KONSTEN ATT BAKA SEGT & KLADDIGT.",
+                heroTitle: "KONSTEN ATT BAKA\nSEGT & KLADDIGT.",
                 heroSub: "Handgjorda kakor och specialiteter i burk. Färsk fika levererad över hela Stockholm.",
                 heroBtnShop: "Bygg din box",
                 heroBtnMenu: "Vår meny",
@@ -644,19 +644,31 @@
                     <main className="flex-grow pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6">
                         {view === 'home' && (
                             <div className="max-w-7xl mx-auto space-y-20 md:space-y-32">
-                                <header className="relative bg-[#4A3728] rounded-[2.5rem] md:rounded-[5rem] overflow-hidden p-8 md:p-24 min-h-[500px] md:min-h-[600px] flex items-center">
-                                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none hidden md:block">
+                                <header className="relative bg-[#4A3728] rounded-[2.5rem] md:rounded-[4rem] lg:rounded-[5rem] overflow-hidden p-8 md:p-12 lg:p-20 min-h-[500px] md:min-h-[600px] flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+                                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none hidden lg:block">
                                         <CookieSVG color="#FFFFFF" className="w-full h-full scale-150 rotate-12" />
                                     </div>
-                                    <div className="relative z-10 max-w-2xl space-y-6 md:space-y-8 animate-in text-center md:text-left mx-auto md:mx-0">
+                                    
+                                    <div className="relative z-10 lg:w-1/2 max-w-2xl space-y-6 md:space-y-8 animate-in text-center lg:text-left mx-auto lg:mx-0 w-full pt-8 lg:pt-0">
                                         <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[#D4A373]">{t('heroTag')}</div>
-                                        <h1 className="text-4xl sm:text-5xl md:text-8xl font-black text-white leading-[1.1] md:leading-[0.9] tracking-tighter whitespace-pre-line">
+                                        <h1 className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black text-white leading-[1.1] md:leading-[0.95] tracking-tighter whitespace-pre-line">
                                             {t('heroTitle')}
                                         </h1>
-                                        <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto md:mx-0 leading-relaxed">{t('heroSub')}</p>
-                                        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6">
+                                        <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto lg:mx-0 leading-relaxed">{t('heroSub')}</p>
+                                        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6 justify-center lg:justify-start">
                                             <button onClick={() => navigate('shop')} className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">{t('heroBtnShop')}</button>
                                             <button onClick={() => navigate('home', 'cookies-section')} className="bg-white text-[#4A3728] px-8 py-5 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-[#D4A373] hover:text-white transition-all">{t('heroBtnMenu')}</button>
+                                        </div>
+                                    </div>
+
+                                    <div className="relative z-10 lg:w-1/2 w-full h-[300px] sm:h-[400px] lg:h-[500px] animate-in" style={{ animationDelay: '0.2s' }}>
+                                        <div className="w-full h-full bg-[#FAF9F6]/10 rounded-[2rem] md:rounded-[3rem] overflow-hidden border-4 border-white/5 shadow-2xl group relative">
+                                            <ProductImage 
+                                                src="images/cookies/hero.jpg" 
+                                                color="#D4A373" 
+                                                alt="Oh My Cookie Hero" 
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                                            />
                                         </div>
                                     </div>
                                 </header>
