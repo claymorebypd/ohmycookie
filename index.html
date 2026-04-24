@@ -165,8 +165,8 @@
                 subtotal: "Subtotal",
                 deliveryFee: "Delivery",
                 total: "Total",
-                aboutTitle: "Small Batch, Big Heart.",
-                aboutQuote: "Cookies meant for the moment you finally sit down and take a breath.",
+                aboutTitle: "Artisanal Cookies. Soft, Chewy, Gooey Always.",
+                aboutQuote: "Our cookies are intentionally crafted to deliver soft, chewy, gooey goodness in every bite. Baked to perfection with a tender center and rich flavor, they offer a smooth, indulgent experience that always melt-in-your-mouth delicious.",
                 aboutP1: "Founded by PD, Oh! My Cookie started in a small Stockholm kitchen with one goal: to redefine the fika staple.",
                 aboutP2: "We use 100% organic Swedish butter and ethically sourced cocoa. No shortcuts, just craft.",
                 shareLove: "Share the Love",
@@ -240,8 +240,8 @@
                 subtotal: "Delsumma",
                 deliveryFee: "Frakt",
                 total: "Totalt",
-                aboutTitle: "Små partier, stort hjärta.",
-                aboutQuote: "Kakor skapade för stunden då du äntligen sätter dig ner och tar ett djupt andetag.",
+                aboutTitle: "Hantverkskakor. Mjuka, Sega, Kladdiga Alltid.",
+                aboutQuote: "Våra kakor är noggrant skapade för att leverera mjuk, seg och kladdig godhet i varje tugga. Bakade till perfektion med en mjuk kärna och rik smak, erbjuder de en len, njutningsfull upplevelse som alltid smälter i munnen.",
                 aboutP1: "Oh! My Cookie grundades av PD i ett litet kök i Stockholm med ett mål: att definiera om fika-klassikern.",
                 aboutP2: "Vi använder 100% ekologiskt svenskt smör och etiskt framställd kakao. Inga genvägar, bara hantverk.",
                 shareLove: "Dela kärleken",
@@ -564,7 +564,7 @@
             const navLinks = [
                 { id: 'home', label: t('navHome') },
                 { id: 'cookies', label: t('navCookies'), section: 'cookies-section' },
-                { id: 'cakes', label: t('navCakes') },
+                { id: 'cakes', label: t('navCakes'), section: 'cakes-section' },
                 { id: 'shop', label: t('navShop') },
                 { id: 'about', label: t('navAbout') }
             ];
@@ -684,6 +684,7 @@
                                         </div>
                                     </div>
                                 </header>
+                                
                                 <section id="cookies-section" className="scroll-mt-32 space-y-12 md:space-y-16">
                                     <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 border-b border-[#F2E8DF] pb-10 text-center md:text-left">
                                         <div className="space-y-3">
@@ -713,46 +714,44 @@
                                         ))}
                                     </div>
                                 </section>
-                            </div>
-                        )}
 
-                        {view === 'cakes' && (
-                            <div className="max-w-7xl mx-auto space-y-12 md:space-y-20 animate-in pt-6">
-                                <header className="text-center space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#D4A373]">{t('cakeTag')}</span>
-                                    <h1 className="text-4xl md:text-7xl font-black text-[#4A3728] tracking-tighter">{t('cakeTitle')}</h1>
-                                    <p className="text-base md:text-lg text-[#A09184] leading-relaxed">{t('cakeSub')}</p>
-                                </header>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-                                    {CAKES.map(cake => (
-                                        <div key={cake.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-[#F2E8DF] hover:shadow-xl transition-shadow group flex flex-col">
-                                            <div className="relative aspect-square md:aspect-[4/3] bg-[#FAF9F6] overflow-hidden">
-                                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700">
-                                                    <ProductImage src={cake.imageSrc} color={cake.color} alt={cake.name} className="w-full h-full object-cover" />
-                                                </div>
-                                                {cake[`tag_${lang}`] && (
-                                                    <div className="absolute top-6 left-6 z-10">
-                                                        <span className="glass-panel px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-[#4A3728] shadow-sm">
-                                                            {cake[`tag_${lang}`]}
-                                                        </span>
+                                <section id="cakes-section" className="scroll-mt-32 space-y-12 md:space-y-16 pt-10">
+                                    <header className="text-center space-y-4 md:space-y-6 max-w-3xl mx-auto border-b border-[#F2E8DF] pb-10">
+                                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#D4A373]">{t('cakeTag')}</span>
+                                        <h2 className="text-4xl md:text-6xl font-black text-[#4A3728] tracking-tighter">{t('cakeTitle')}</h2>
+                                        <p className="text-base md:text-lg text-[#A09184] leading-relaxed italic">{t('cakeSub')}</p>
+                                    </header>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
+                                        {CAKES.map(cake => (
+                                            <div key={cake.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-[#F2E8DF] hover:shadow-xl transition-shadow group flex flex-col">
+                                                <div className="relative aspect-square md:aspect-[4/3] bg-[#FAF9F6] overflow-hidden">
+                                                    <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700">
+                                                        <ProductImage src={cake.imageSrc} color={cake.color} alt={cake.name} className="w-full h-full object-cover" />
                                                     </div>
-                                                )}
-                                            </div>
-                                            <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4 md:space-y-5">
-                                                <div>
-                                                    <div className="flex justify-between items-start mb-3">
-                                                        <h3 className="text-xl md:text-2xl font-black text-[#4A3728] leading-tight pr-4">{cake.name}</h3>
-                                                        <span className="text-[#D4A373] font-black text-sm md:text-base whitespace-nowrap">{cake.price} SEK</span>
-                                                    </div>
-                                                    <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cake[`desc_${lang}`]}</p>
+                                                    {cake[`tag_${lang}`] && (
+                                                        <div className="absolute top-6 left-6 z-10">
+                                                            <span className="glass-panel px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-[#4A3728] shadow-sm">
+                                                                {cake[`tag_${lang}`]}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <button onClick={() => addToCart(cake.name, cake.price)} className="w-full py-4 md:py-5 bg-[#4A3728] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#D4A373] transition-colors flex items-center justify-center gap-2 active:scale-95 mt-auto">
-                                                    <Icon name="Plus" size={16} /> {t('addBag')}
-                                                </button>
+                                                <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4 md:space-y-5">
+                                                    <div>
+                                                        <div className="flex justify-between items-start mb-3">
+                                                            <h3 className="text-xl md:text-2xl font-black text-[#4A3728] leading-tight pr-4">{cake.name}</h3>
+                                                            <span className="text-[#D4A373] font-black text-sm md:text-base whitespace-nowrap">{cake.price} SEK</span>
+                                                        </div>
+                                                        <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cake[`desc_${lang}`]}</p>
+                                                    </div>
+                                                    <button onClick={() => addToCart(cake.name, cake.price)} className="w-full py-4 md:py-5 bg-[#4A3728] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#D4A373] transition-colors flex items-center justify-center gap-2 active:scale-95 mt-auto">
+                                                        <Icon name="Plus" size={16} /> {t('addBag')}
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                </section>
                             </div>
                         )}
 
@@ -1240,7 +1239,7 @@
                                 <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#D4A373]">Fika Links</h4>
                                 <ul className="space-y-3 text-sm font-bold text-[#A09184]">
                                     <li><button onClick={() => navigate('shop')} className="hover:text-white transition-colors">{t('navShop')}</button></li>
-                                    <li><button onClick={() => navigate('cakes')} className="hover:text-white transition-colors">{t('navCakes')}</button></li>
+                                    <li><button onClick={() => navigate('home', 'cakes-section')} className="hover:text-white transition-colors">{t('navCakes')}</button></li>
                                     <li><button onClick={() => navigate('about')} className="hover:text-white transition-colors">{t('navAbout')}</button></li>
                                     <li><a href="https://g.page/r/CWZv_BvtbH5gEBM/review" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Write a review</a></li>
                                     <li><button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">{t('privacyTitle')}</button></li>
