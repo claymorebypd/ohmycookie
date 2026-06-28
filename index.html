@@ -66,7 +66,7 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @media (hover: hover) {
-            .btn-hover:hover {
+            .btn-hover:hover:not(:disabled) {
                 transform: translateY(-2px);
                 box-shadow: 0 10px 20px -10px rgba(74, 55, 40, 0.3);
             }
@@ -109,9 +109,15 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
 
+        // --- CLOSURE SETTINGS ---
+        // Change this to 'false' when you are back from summer break to instantly re-enable the shop!
+        const IS_CLOSED_FOR_SUMMER = false; 
+
         // --- TRANSLATIONS ---
         const TRANSLATIONS = {
             en: {
+                summerClosedBanner: "☀️ We are closed for the summer! We'll be back baking fresh cookies in August.",
+                summerClosedBtn: "Closed for Summer",
                 navHome: "Home",
                 navCookies: "Cookies",
                 navCakes: "Cakes & Jars",
@@ -184,9 +190,11 @@
                 cookieTitle: "Cookie Policy",
                 cookieSub: "We use essential cookies to remember your box fika selections. No tracking involved.",
                 accept: "Accept",
-                close: "Close"
+                close: "Stäng"
             },
             sv: {
+                summerClosedBanner: "☀️ Vi har stängt för sommarsemester! Vi är tillbaka och bakar färska kakor i augusti.",
+                summerClosedBtn: "Sommarstängt",
                 navHome: "Hem",
                 navCookies: "Kakor",
                 navCakes: "Tårtor & Burkar",
@@ -398,7 +406,6 @@
                 paymentMethod: 'swish', instructions: ''
             });
 
-            // Helper to get translated string
             const t = (key) => TRANSLATIONS[lang][key] || key;
 
             useEffect(() => {
@@ -447,6 +454,7 @@
             const totalPrice = subtotal + deliveryFee;
 
             const addToCart = (name, price) => {
+                if(IS_CLOSED_FOR_SUMMER) return; // Safeguard
                 setCart(prev => {
                     const exists = prev.find(i => i.name === name);
                     if (exists) return prev.map(i => i.name === name ? { ...i, quantity: i.quantity + 1 } : i);
@@ -459,7 +467,6 @@
                 setCart(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(0, i.quantity + delta) } : i).filter(i => i.quantity > 0));
             };
 
-            // Calculate current exact total for box if full
             const currentBoxOption = BOX_OPTIONS.find(b => b.size === selectedBoxSize);
             const isBoxFull = selectedBoxSize && currentBox.length === selectedBoxSize;
             const finalBoxPrice = isBoxFull && currentBoxOption 
@@ -467,7 +474,7 @@
                 : 0;
 
             const addBoxToCart = () => {
-                if (!isBoxFull) return;
+                if (!isBoxFull || IS_CLOSED_FOR_SUMMER) return; // Safeguard
                 setCart([...cart, { id: Math.random(), name: currentBoxOption[`title_${lang}`], items: [...currentBox], price: finalBoxPrice, quantity: 1 }]);
                 setSelectedBoxSize(null);
                 setCurrentBox([]);
@@ -571,54 +578,63 @@
 
             return (
                 <div className={`min-h-screen flex flex-col selection:bg-[#D4A373] selection:text-white ${isMobileMenuOpen || isCartOpen ? 'overflow-hidden' : ''}`}>
-                    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-4 md:px-12 ${scrolled ? 'py-3 nav-blur shadow-sm' : 'py-6 md:py-8 bg-transparent'}`}>
-                        <div className="max-w-7xl mx-auto flex justify-between items-center">
-                            <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => navigate('home')}>
-                                <div className="bg-[#4A3728] p-1.5 md:p-2 rounded-xl group-hover:rotate-12 transition-transform">
-                                    <Icon name="Cookie" size={18} className="text-white md:w-[20px] md:h-[20px]" />
+                    
+                    {/* Header Grouping the Banner and Navbar */}
+                    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-500">
+                        {IS_CLOSED_FOR_SUMMER && (
+                            <div className="bg-[#D4A373] text-white text-center py-2.5 px-4 text-[10px] md:text-xs font-black uppercase tracking-widest shadow-sm z-50">
+                                {t('summerClosedBanner')}
+                            </div>
+                        )}
+                        <nav className={`px-4 md:px-12 transition-all duration-500 ${scrolled ? 'py-3 nav-blur shadow-sm' : 'py-6 md:py-8 bg-transparent'}`}>
+                            <div className="max-w-7xl mx-auto flex justify-between items-center">
+                                <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => navigate('home')}>
+                                    <div className="bg-[#4A3728] p-1.5 md:p-2 rounded-xl group-hover:rotate-12 transition-transform">
+                                        <Icon name="Cookie" size={18} className="text-white md:w-[20px] md:h-[20px]" />
+                                    </div>
+                                    <span className="font-black text-lg md:text-xl tracking-tighter uppercase text-[#4A3728]">
+                                        ohmycookie<span className="text-[#D4A373]">.se</span>
+                                    </span>
                                 </div>
-                                <span className="font-black text-lg md:text-xl tracking-tighter uppercase text-[#4A3728]">
-                                    ohmycookie<span className="text-[#D4A373]">.se</span>
-                                </span>
-                            </div>
 
-                            <div className="hidden lg:flex gap-8 items-center">
-                                {navLinks.map(item => (
-                                    <button 
-                                        key={item.id}
-                                        onClick={() => navigate(item.id, item.section)}
-                                        className={`text-[11px] font-black uppercase tracking-[0.2em] transition-colors ${view === item.id ? 'text-[#D4A373]' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
-                                    >
-                                        {item.label}
+                                <div className="hidden lg:flex gap-8 items-center">
+                                    {navLinks.map(item => (
+                                        <button 
+                                            key={item.id}
+                                            onClick={() => navigate(item.id, item.section)}
+                                            className={`text-[11px] font-black uppercase tracking-[0.2em] transition-colors ${view === item.id ? 'text-[#D4A373]' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
+                                        >
+                                            {item.label}
+                                        </button>
+                                    ))}
+                                    <button onClick={toggleLang} className="ml-4 px-3 py-1.5 bg-[#4A3728] text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#D4A373] transition-colors">
+                                        {lang === 'en' ? 'Svenska' : 'English'}
                                     </button>
-                                ))}
-                                <button onClick={toggleLang} className="ml-4 px-3 py-1.5 bg-[#4A3728] text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-[#D4A373] transition-colors">
-                                    {lang === 'en' ? 'Svenska' : 'English'}
-                                </button>
-                            </div>
+                                </div>
 
-                            <div className="flex items-center gap-2 md:gap-4">
-                                <button 
-                                    onClick={() => setIsCartOpen(true)}
-                                    className="relative h-10 px-3 md:h-12 md:px-4 glass-panel rounded-xl md:rounded-2xl flex items-center justify-center gap-2.5 border border-[#D4A373]/20 hover:scale-105 transition-transform"
-                                >
-                                    <ShoppingBagSVG size={18} className="text-[#4A3728]" />
-                                    {totalItemsCount > 0 && (
-                                        <span className="bg-[#D4A373] text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full flex items-center justify-center min-w-[20px]">
-                                            {totalItemsCount}
-                                        </span>
-                                    )}
-                                </button>
-                                
-                                <button 
-                                    onClick={() => setIsMobileMenuOpen(true)}
-                                    className="lg:hidden w-10 h-10 glass-panel rounded-xl flex items-center justify-center"
-                                >
-                                    <Icon name="Menu" size={18} />
-                                </button>
+                                <div className="flex items-center gap-2 md:gap-4">
+                                    <button 
+                                        onClick={() => setIsCartOpen(true)}
+                                        className="relative h-10 px-3 md:h-12 md:px-4 glass-panel rounded-xl md:rounded-2xl flex items-center justify-center gap-2.5 border border-[#D4A373]/20 hover:scale-105 transition-transform"
+                                    >
+                                        <ShoppingBagSVG size={18} className="text-[#4A3728]" />
+                                        {totalItemsCount > 0 && (
+                                            <span className="bg-[#D4A373] text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full flex items-center justify-center min-w-[20px]">
+                                                {totalItemsCount}
+                                            </span>
+                                        )}
+                                    </button>
+                                    
+                                    <button 
+                                        onClick={() => setIsMobileMenuOpen(true)}
+                                        className="lg:hidden w-10 h-10 glass-panel rounded-xl flex items-center justify-center"
+                                    >
+                                        <Icon name="Menu" size={18} />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </nav>
+                        </nav>
+                    </header>
 
                     {isMobileMenuOpen && (
                         <div className="fixed inset-0 z-[100] bg-[#4A3728] text-white flex flex-col p-8 md:p-12 animate-in">
@@ -653,7 +669,8 @@
                         </div>
                     )}
 
-                    <main className="flex-grow pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6">
+                    {/* Adjusted Top Padding for the banner */}
+                    <main className={`flex-grow ${IS_CLOSED_FOR_SUMMER ? 'pt-32 md:pt-40' : 'pt-24 md:pt-32'} pb-12 md:pb-20 px-4 md:px-6 transition-all`}>
                         {view === 'home' && (
                             <div className="max-w-7xl mx-auto space-y-20 md:space-y-32">
                                 <header className="relative bg-[#4A3728] rounded-[2.5rem] md:rounded-[4rem] lg:rounded-[5rem] overflow-hidden p-8 md:p-12 lg:p-20 min-h-[500px] md:min-h-[600px] flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
@@ -668,7 +685,12 @@
                                         </h1>
                                         <p className="text-[#A09184] text-base md:text-lg max-w-sm mx-auto lg:mx-0 leading-relaxed">{t('heroSub')}</p>
                                         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6 justify-center lg:justify-start">
-                                            <button onClick={() => navigate('shop')} className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover">{t('heroBtnShop')}</button>
+                                            <button 
+                                                onClick={() => navigate('shop')} 
+                                                className="w-full sm:w-auto px-10 py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest btn-hover"
+                                            >
+                                                {t('heroBtnShop')}
+                                            </button>
                                             <button onClick={() => navigate('home', 'cookies-section')} className="bg-white text-[#4A3728] px-8 py-5 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-[#D4A373] hover:text-white transition-all">{t('heroBtnMenu')}</button>
                                         </div>
                                     </div>
@@ -708,7 +730,15 @@
                                                         <span className="font-black text-base md:text-lg text-[#D4A373] whitespace-nowrap">{cookie.price} <span className="text-[10px]">SEK</span></span>
                                                     </div>
                                                     <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cookie[`desc_${lang}`]}</p>
-                                                    <button onClick={() => addToCart(cookie.name, cookie.price)} className="w-full py-4 bg-[#F5EBE0]/40 text-[#4A3728] rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#4A3728] hover:text-white transition-all active:scale-95">{t('addBag')}</button>
+                                                    
+                                                    {/* Updated Button to Handle Summer Closure */}
+                                                    <button 
+                                                        onClick={() => addToCart(cookie.name, cookie.price)} 
+                                                        disabled={IS_CLOSED_FOR_SUMMER}
+                                                        className={`w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 ${IS_CLOSED_FOR_SUMMER ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-[#F5EBE0]/40 text-[#4A3728] hover:bg-[#4A3728] hover:text-white'}`}
+                                                    >
+                                                        {IS_CLOSED_FOR_SUMMER ? t('summerClosedBtn') : t('addBag')}
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -744,8 +774,15 @@
                                                         </div>
                                                         <p className="text-sm text-[#A09184] leading-relaxed line-clamp-2 md:line-clamp-none">{cake[`desc_${lang}`]}</p>
                                                     </div>
-                                                    <button onClick={() => addToCart(cake.name, cake.price)} className="w-full py-4 md:py-5 bg-[#4A3728] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#D4A373] transition-colors flex items-center justify-center gap-2 active:scale-95 mt-auto">
-                                                        <Icon name="Plus" size={16} /> {t('addBag')}
+                                                    
+                                                    {/* Updated Button to Handle Summer Closure */}
+                                                    <button 
+                                                        onClick={() => addToCart(cake.name, cake.price)} 
+                                                        disabled={IS_CLOSED_FOR_SUMMER}
+                                                        className={`w-full py-4 md:py-5 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 mt-auto transition-colors ${IS_CLOSED_FOR_SUMMER ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-[#4A3728] text-white hover:bg-[#D4A373]'}`}
+                                                    >
+                                                        {!IS_CLOSED_FOR_SUMMER && <Icon name="Plus" size={16} />} 
+                                                        {IS_CLOSED_FOR_SUMMER ? t('summerClosedBtn') : t('addBag')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -812,7 +849,13 @@
                                                                 {cookie.name} 
                                                                 <span className="block mt-0.5 text-[10px] font-bold text-[#D4A373] uppercase">{cookie.price} SEK</span>
                                                             </h4>
-                                                            <button onClick={() => {if(currentBox.length < selectedBoxSize) setCurrentBox([...currentBox, cookie])}} disabled={currentBox.length >= selectedBoxSize} className="px-4 py-2 bg-[#F5EBE0] text-[#4A3728] rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-[#4A3728] hover:text-white transition-all disabled:opacity-20 active:scale-95">{t('addMore')}</button>
+                                                            <button 
+                                                                onClick={() => {if(currentBox.length < selectedBoxSize) setCurrentBox([...currentBox, cookie])}} 
+                                                                disabled={currentBox.length >= selectedBoxSize || IS_CLOSED_FOR_SUMMER} 
+                                                                className={`px-4 py-2 rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-20 active:scale-95 ${IS_CLOSED_FOR_SUMMER ? 'bg-gray-100 text-gray-400' : 'bg-[#F5EBE0] text-[#4A3728] hover:bg-[#4A3728] hover:text-white'}`}
+                                                            >
+                                                                {IS_CLOSED_FOR_SUMMER ? 'Closed' : t('addMore')}
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -835,8 +878,14 @@
                                                     </div>
                                                 ))}
                                             </div>
-                                            <button onClick={addBoxToCart} disabled={!isBoxFull} className="w-full py-4 md:py-5 bg-[#D4A373] text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all">
-                                                {isBoxFull ? `${t('boxAdded')} • ${finalBoxPrice} SEK` : `${t('addMore')} ${selectedBoxSize - currentBox.length}`}
+                                            
+                                            {/* Updated Button to Handle Summer Closure */}
+                                            <button 
+                                                onClick={addBoxToCart} 
+                                                disabled={!isBoxFull || IS_CLOSED_FOR_SUMMER} 
+                                                className={`w-full py-4 md:py-5 rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all ${IS_CLOSED_FOR_SUMMER ? 'bg-gray-500 text-gray-300' : 'bg-[#D4A373] text-white'}`}
+                                            >
+                                                {IS_CLOSED_FOR_SUMMER ? t('summerClosedBtn') : (isBoxFull ? `${t('boxAdded')} • ${finalBoxPrice} SEK` : `${t('addMore')} ${selectedBoxSize - currentBox.length}`)}
                                             </button>
                                         </div>
                                     </div>
@@ -1283,7 +1332,15 @@
                                 {cart.length > 0 && (
                                     <div className="pt-8 md:pt-10 space-y-6">
                                         <div className="flex justify-between items-end"><span className="text-[10px] font-black uppercase text-[#A09184] tracking-[0.3em]">{t('subtotal')}</span><span className="text-4xl md:text-5xl font-black text-[#4A3728] tracking-tighter">{subtotal} SEK</span></div>
-                                        <button onClick={() => navigate('checkout')} className="w-full py-5 md:py-6 bg-[#4A3728] text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#D4A373] transition-colors active:scale-95">{t('proceedCheckout')}</button>
+                                        
+                                        {/* Updated Button to Handle Summer Closure */}
+                                        <button 
+                                            onClick={() => navigate('checkout')} 
+                                            disabled={IS_CLOSED_FOR_SUMMER}
+                                            className={`w-full py-5 md:py-6 rounded-[1.5rem] md:rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl transition-colors active:scale-95 ${IS_CLOSED_FOR_SUMMER ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#4A3728] text-white hover:bg-[#D4A373]'}`}
+                                        >
+                                            {IS_CLOSED_FOR_SUMMER ? t('summerClosedBtn') : t('proceedCheckout')}
+                                        </button>
                                     </div>
                                 )}
                             </div>
